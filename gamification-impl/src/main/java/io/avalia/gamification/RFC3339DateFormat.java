@@ -1,4 +1,4 @@
-package io.avalia.events;
+package io.avalia.gamification;
 
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;

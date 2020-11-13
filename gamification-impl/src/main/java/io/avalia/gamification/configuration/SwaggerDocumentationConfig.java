@@ -1,4 +1,4 @@
-package io.avalia.events.configuration;
+package io.avalia.gamification.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ public class SwaggerDocumentationConfig {
     public Docket customImplementation(){
         return new Docket(DocumentationType.OAS_30)
             .select()
-                .apis(RequestHandlerSelectors.basePackage("io.avalia.events.api"))
+                .apis(RequestHandlerSelectors.basePackage("io.avalia.gamification.api"))
                 .build()
             .directModelSubstitute(Void.class, Void.class)
             .securitySchemes(singletonList(securityScheme()))

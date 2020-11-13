@@ -1,4 +1,4 @@
-package io.avalia.events.api.exceptions;
+package io.avalia.gamification.api.exceptions;
 
 public class NotFoundException extends ApiException {
     private int code;

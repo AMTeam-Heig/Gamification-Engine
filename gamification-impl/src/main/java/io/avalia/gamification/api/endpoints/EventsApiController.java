@@ -1,9 +1,9 @@
-package io.avalia.events.api.endpoints;
+package io.avalia.gamification.api.endpoints;
 
-import io.avalia.events.api.EventsApi;
-import io.avalia.events.api.model.Event;
-import io.avalia.events.entities.EventEntity;
-import io.avalia.events.repositories.EventRepository;
+import io.avalia.gamification.api.EventsApi;
+import io.avalia.gamification.api.model.Event;
+import io.avalia.gamification.entities.EventEntity;
+import io.avalia.gamification.repositories.EventRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

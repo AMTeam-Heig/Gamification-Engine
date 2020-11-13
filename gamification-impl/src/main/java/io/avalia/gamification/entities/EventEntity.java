@@ -1,4 +1,4 @@
-package io.avalia.events.entities;
+package io.avalia.gamification.entities;
 
 import lombok.Data;
 

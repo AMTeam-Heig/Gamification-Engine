@@ -7,6 +7,7 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
+  # EVENTS
   /event:
     post:
       description: create a event
@@ -20,7 +21,7 @@ paths:
         '201':
           description: created
     get:
-      description: get the list of all events
+      description: get the list of all gamification
       operationId: getEvents
       responses:
         '200':
@@ -48,6 +49,48 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Event'
+  # BADGES
+  /badges:
+    post:
+      description: create a badge
+      operationId: createBadge
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '201':
+          description: created
+    get:
+      description: get the list of all badges
+      operationId: getBadges
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Badge'
+  /badges/{id}:
+    get:
+      description: get one badge, by id
+      operationId: getBadge
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Badge'
 
 components:
   securitySchemes:
@@ -66,4 +109,16 @@ components:
       properties:
         id:
           type: long
+          nullable: false
+    # BADGES
+    Badge:
+      type: object
+      properties:
+        level:
+          type: string
+        description:
+          type: string
+        obtainedOnDate:
+          type: string
+          format: date
           nullable: false

@@ -1,4 +1,4 @@
-package io.avalia.events;
+package io.avalia.gamification;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"io.avalia.events", "io.avalia.events.api"})
+@ComponentScan(basePackages = {"io.avalia.gamification", "io.avalia.gamification.api"})
 public class    Swagger2SpringBoot implements CommandLineRunner {
 
     @PostConstruct

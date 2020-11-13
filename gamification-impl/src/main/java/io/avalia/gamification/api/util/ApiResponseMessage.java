@@ -1,4 +1,4 @@
-package io.avalia.events.api.util;
+package io.avalia.gamification.api.util;
 
 import javax.xml.bind.annotation.XmlTransient;
 
