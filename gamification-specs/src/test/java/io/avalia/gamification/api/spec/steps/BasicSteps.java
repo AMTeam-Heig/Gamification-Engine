@@ -15,8 +15,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class BasicSteps {
 
@@ -105,11 +104,15 @@ public class BasicSteps {
         assertEquals(event, lastReceivedEvent);
     }
 
+    @And("I receive an event payload that is null")
+    public void iReceiveAnEventPayloadThatIsNull() {
+        assertNull(lastReceivedEvent);
+    }
+
     @Given("there is a Gamification server")
     public void there_is_a_Gamification_server() throws Throwable {
         assertNotNull(api);
     }
-
 
     @Then("I receive a {int} status code")
     public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
@@ -120,13 +123,24 @@ public class BasicSteps {
     public void iReceiveAStatusCodeWithALocationHeader(int arg0) {
     }
 
-    @When("I send a GET to the URL in the location header")
-    public void iSendAGETToTheURLInTheLocationHeader() {
+    @When("I send a GET to the URL in the badge location header")
+    public void iSendAGETToTheURLInTheBadgeLocationHeader() {
         Integer id = Integer.parseInt(lastReceivedLocationHeader.substring(lastReceivedLocationHeader.lastIndexOf('/') + 1));
         try {
             lastApiResponse = api.getBadgeWithHttpInfo(id);
             processApiResponse(lastApiResponse);
             lastReceivedBadge = (Badge)lastApiResponse.getData();
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
+
+    @When("I send a GET to the URL in the event location header")
+    public void iSendAGETToTheURLInTheEventLocationHeader() {
+        Integer id = Integer.parseInt(lastReceivedLocationHeader.substring(lastReceivedLocationHeader.lastIndexOf('/') + 1));
+        try {
+            lastApiResponse = api.getEventWithHttpInfo(id);
+            processApiResponse(lastApiResponse);
             lastReceivedEvent = (Event)lastApiResponse.getData();
         } catch (ApiException e) {
             processApiException(e);
@@ -148,4 +162,5 @@ public class BasicSteps {
         lastApiException = apiException;
         lastStatusCode = lastApiException.getCode();
     }
+
 }
