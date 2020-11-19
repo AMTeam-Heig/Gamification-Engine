@@ -7,6 +7,72 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
+  # LOGIN
+  /login:
+    post:
+      description: log with credentials
+      operationId: login
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '201':
+          description: Login Successful
+        '401':
+          description: Wrong user credentials
+  # USERS
+  /users:
+    post:
+      description: create a user
+      operationId: register
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: user created
+        '401':
+          description: request error
+        '403':
+          description: username already taken
+  /users/{username}:
+    parameters:
+      - in: path
+        name: username
+        required: true
+        schema:
+          $ref: '#/components/schemas/Username'
+    get:
+      description: get user informations
+      operationId: getUserByUsername
+      responses:
+        '201':
+          description: user informations
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: username does not exist
+    put:
+      description: change user password
+      operationId: changePassword
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/NewPassword'
+      responses:
+        '201':
+          description: changed password successfully
+        '401':
+          description: Operation failed
   # EVENTS
   /events:
     post:
@@ -108,7 +174,7 @@ components:
       type: object
       properties:
         id:
-          type: long
+          type: integer
           nullable: false
     # BADGES
     Badge:
@@ -122,3 +188,35 @@ components:
           type: string
           format: date
           nullable: false
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        reputation:
+          type: string
+    UserCredentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Username:
+      type: object
+      properties:
+        username:
+          type: string
+    NewPassword:
+      type: object
+      properties:
+        newpassword:
+          type: string
