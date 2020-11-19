@@ -3,72 +3,46 @@ package io.avalia.gamification.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 
-import java.util.List;
-
-import static java.util.Collections.singletonList;
-
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-11-19T13:42:22.997Z[GMT]")
 @Configuration
 public class SwaggerDocumentationConfig {
 
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Gamification API")
-            .description("An API to add a gamification process to a simple site with Swagger and Spring Boot")
-            .version("0.2.0")
-            .build();
+                .build();
     }
 
     @Bean
     public Docket customImplementation(){
         return new Docket(DocumentationType.OAS_30)
-            .select()
-                .apis(RequestHandlerSelectors.basePackage("io.avalia.gamification.api"))
-                .build()
-            .directModelSubstitute(Void.class, Void.class)
-            .securitySchemes(singletonList(securityScheme()))
-            .securityContexts(singletonList(securityContext()))
-            .apiInfo(apiInfo());
+                .select()
+                    .apis(RequestHandlerSelectors.basePackage("io.avalia.gamification.api"))
+                    .build()
+                .directModelSubstitute(org.threeten.bp.LocalDate.class, java.sql.Date.class)
+                .directModelSubstitute(org.threeten.bp.OffsetDateTime.class, java.util.Date.class)
+                .apiInfo(apiInfo());
     }
-
-    private SecurityScheme securityScheme() {
-        /*
-        return new HttpAuthenticationBuilder()
-          .name("BearerAuthorization")
-          .scheme("bearer")
-          .build();
-         */
-        return new ApiKey("X-API-KEY", "api_key", "header");
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-          .securityReferences(securityReferences())
-          .build();
-    }
-
-    private List<SecurityReference> securityReferences() {
-        return singletonList(
-          new SecurityReference("X-API-KEY", new AuthorizationScope[] {}));
-          // new SecurityReference("BearerAuthorization", new AuthorizationScope[] {}));
-    }
-
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
-        };
+    public OpenAPI configure() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("Gamification API")
+                .description("An API to add a gamification process to a simple site with Swagger and Spring Boot")
+                .termsOfService("")
+                .version("0.1.0")
+                .license(new License()
+                    .name("")
+                    .url("http://unlicense.org")));
     }
+
 }
