@@ -1,4 +1,4 @@
-package io.swagger;
+package io.avalia.gamification;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -10,7 +10,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
 @EnableOpenApi
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" , "io.swagger.configuration"})
+@ComponentScan(basePackages = { "io.swagger", "io.avalia.gamification.api" , "io.avalia.gamification.configuration"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override
