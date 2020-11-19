@@ -10,7 +10,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
 @EnableOpenApi
-@ComponentScan(basePackages = { "io.swagger", "io.avalia.gamification.api" , "io.avalia.gamification.configuration"})
+@ComponentScan(basePackages = { "io.avalia.gamification", "io.avalia.gamification.api" , "io.avalia.gamification.configuration"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override

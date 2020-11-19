@@ -7,6 +7,29 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
+  #APPLICATION REGISTRATION
+  /application:
+    parameters:
+      - $ref: '#/components/securitySchemes/apiKeyAuth'
+    post:
+      description: create a new application
+      operationId: newApplication
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Application correctly created
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Application'
+
   # LOGIN
   /login:
     post:
@@ -167,9 +190,32 @@ components:
     apiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-KEY
+      name: apiKey
+  parameters:
+    Apikey:
+      description: "Application api key"
+      name: "apiKey"
+      in: header
+      required: true
+      schema:
+        type: string
+  responses:
+    UnauthorizedError:
+      description: Api key is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
   schemas:
-    #EVENTS
+    # APPLICATIONS
+    Application:
+      type: object
+      properties:
+        apiKey:
+          type: string
+        name:
+          type: string
+    # EVENTS
     Event:
       type: object
       properties:
@@ -188,6 +234,7 @@ components:
           type: string
           format: date
           nullable: false
+    # USERS
     User:
       type: object
       properties:
