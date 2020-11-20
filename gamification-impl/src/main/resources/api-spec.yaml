@@ -13,10 +13,10 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
-  /applications:
+  /application:
     post:
       description: create a new application
-      operationId: newApplication
+      operationId: createApplication
       requestBody:
         content:
           'application/json':
@@ -215,6 +215,7 @@ components:
       properties:
         id:
           type: integer
+          nullable: true
         level:
           type: string
         name:
@@ -224,12 +225,14 @@ components:
         ObtainedOnDate:
           type: string
           format: date
+          nullable: true
     #USER
     User:
       type: object
       properties:
         id:
           type: integer
+          nullable: true
         name:
           type: string
         birthdate:
@@ -237,6 +240,7 @@ components:
           format: date
         reputation:
           type: string
+          nullable: true
         points:
           type: integer
-
+          nullable: true

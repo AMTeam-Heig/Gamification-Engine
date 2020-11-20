@@ -6,7 +6,11 @@ import ch.heig.amt.gamification.api.model.User;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
+
 import io.swagger.annotations.ApiParam;
+
+import org.openapitools.jackson.nullable.JsonNullable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +39,7 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<Void> createUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) User user) {
         ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
         if (app != null) {
-            UserEntity newUserEntity = toUserEntity(user);
+            UserEntity newUserEntity = toUserEntity(user, app);
             newUserEntity.setApp(app);
             userRepository.save(newUserEntity);
 
@@ -72,22 +76,25 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    private UserEntity toUserEntity(User user) {
-        UserEntity entity = new UserEntity();
-        entity.setId(user.getId());
-        entity.setName(user.getName());
-        entity.setPoints(user.getPoints());
-        entity.setReputation(user.getReputation());
-        entity.setBirthdate(user.getBirthdate());
-        return entity;
+    private UserEntity toUserEntity(User user, ApplicationEntity app) {
+        UserEntity userEntity = new UserEntity();
+
+        userEntity.setId(user.getId().isPresent() ? user.getId().get() : 1); // TODO set new id if null
+        userEntity.setApp(app);
+        userEntity.setName(user.getName());
+        userEntity.setPoints(user.getPoints().isPresent() ?  user.getPoints().get() : 0);
+        userEntity.setBirthdate(user.getBirthdate());
+        userEntity.setReputation(user.getReputation().isPresent() ? user.getReputation().get() : "Basic reputation");
+
+        return userEntity;
     }
 
     private User toUser(UserEntity entity) {
         User user = new User();
-        user.setId(entity.getId());
+        user.setId(JsonNullable.of(entity.getId()));
         user.setName(entity.getName());
-        user.setPoints(entity.getPoints());
-        user.setReputation(entity.getReputation());
+        user.setPoints(JsonNullable.of(entity.getPoints()));
+        user.setReputation(JsonNullable.of(entity.getReputation()));
         user.setBirthdate(entity.getBirthdate());
         return user;
     }

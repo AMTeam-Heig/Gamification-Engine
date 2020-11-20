@@ -7,6 +7,7 @@ import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.BadgeRepository;
 import io.swagger.annotations.ApiParam;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,21 +76,21 @@ public class BadgesApiController implements BadgesApi {
 
     private BadgeEntity toBadgeEntity(Badge badge) {
         BadgeEntity entity = new BadgeEntity();
-        entity.setId(badge.getId());
+        entity.setId(badge.getId().isPresent() ? badge.getId().get() : 2); // TODO create new id
         entity.setLevel(badge.getLevel());
         entity.setName(badge.getName());
         entity.setDescription(badge.getDescription());
-        entity.setObtainedOnDate(badge.getObtainedOnDate());
+        entity.setObtainedOnDate(badge.getObtainedOnDate().isPresent() ? badge.getObtainedOnDate().get() : LocalDate.now());
         return entity;
     }
 
     private Badge toBadge(BadgeEntity entity) {
         Badge badge = new Badge();
-        badge.setId(entity.getId());
+        badge.setId(JsonNullable.of(entity.getId()));
         badge.setLevel(entity.getLevel());
         badge.setName(entity.getName());
         badge.setDescription(entity.getDescription());
-        badge.setObtainedOnDate(entity.getObtainedOnDate());
+        badge.setObtainedOnDate(JsonNullable.of(entity.getObtainedOnDate()));
         return badge;
     }
 }

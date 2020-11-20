@@ -1,7 +1,7 @@
 package ch.heig.amt.gamification.api.endpoints;
 
 import ch.heig.amt.gamification.entities.ApplicationEntity;
-import ch.heig.amt.gamification.api.ApplicationsApi;
+import ch.heig.amt.gamification.api.ApplicationApi;
 import ch.heig.amt.gamification.api.model.Application;
 import ch.heig.amt.gamification.api.model.InlineObject;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
@@ -12,15 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
-public class ApplicationsApiController implements ApplicationsApi {
+public class ApplicationApiController implements ApplicationApi {
     @Autowired
     ApplicationRepository applicationRepository;
 
-    public ResponseEntity<Application> newApplication(@ApiParam(value = "", required = true) @Valid @RequestBody InlineObject inlineObject) {
+    public ResponseEntity<Application> createApplication(@ApiParam(value = "", required = true) @Valid @RequestBody InlineObject inlineObject) {
         ApplicationEntity appEntity = new ApplicationEntity();
         appEntity.setApiKey(ApplicationEntity.generateApiKey());
         appEntity.setName(inlineObject.getName());
@@ -32,14 +30,10 @@ public class ApplicationsApiController implements ApplicationsApi {
         return ResponseEntity.ok(app);
     }
 
-    public ResponseEntity<List<Application>> getApplications(String xApiKey) {
-        List<Application> applications = new ArrayList<>();
-
-        applications.add(toApplication(applicationRepository.findByApiKey(xApiKey)));
-
+    public ResponseEntity<Application> getApplication(String xApiKey) {
+        Application applications = toApplication(applicationRepository.findByApiKey(xApiKey));
         return ResponseEntity.ok(applications);
     }
-
 
     private Application toApplication(ApplicationEntity entity) {
         Application application = new Application();
