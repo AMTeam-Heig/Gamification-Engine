@@ -1,5 +1,6 @@
 package io.avalia.gamification.repositories;
 
+import io.avalia.gamification.api.model.Application;
 import io.avalia.gamification.entities.ApplicationEntity;
 import org.springframework.data.repository.CrudRepository;
 

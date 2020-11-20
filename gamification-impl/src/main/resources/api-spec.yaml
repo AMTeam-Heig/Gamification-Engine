@@ -13,7 +13,7 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
-  /application:
+  /applications:
     post:
       description: create a new application
       operationId: newApplication
@@ -32,7 +32,24 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Application'
-
+    get:
+      description: get the list of all app by apikey
+      operationId: getApplications
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
   /badges:
     post:
       description: create a badge
