@@ -81,8 +81,8 @@ public class BasicSteps {
         application = new ch.heig.amt.gamification.api.dto.InlineObject().name("New Application");
     }
 
-    @When("^I POST the application payload to the /applications endpoint$")
-    public void i_POST_the_application_payload_to_the_applications_endpoint() throws Throwable {
+    @When("^I POST the application payload to the /application endpoint$")
+    public void i_POST_the_application_payload_to_the_application_endpoint() throws Throwable {
         try {
             lastApiResponse = api.newApplicationWithHttpInfo(application);
             processApiResponse(lastApiResponse);
@@ -91,8 +91,8 @@ public class BasicSteps {
         }
     }
 
-    @When("^I send a GET to the /applications endpoint$")
-    public void iSendAGETToTheApplicationsEndpoint() {
+    @When("^I send a GET to the /application endpoint$")
+    public void iSendAGETToTheApplicationEndpoint() {
         try {
             lastApiResponse = api.getApplicationsWithHttpInfo(lastReceivedApiKey);
             processApiResponse(lastApiResponse);
