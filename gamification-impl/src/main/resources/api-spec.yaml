@@ -1,16 +1,19 @@
+# ----------------------------------------------------------------------------
+# sources :
+# https://swagger.io/docs/specification/authentication/api-keys/
+# https://swagger.io/docs/specification/describing-responses/
+# ----------------------------------------------------------------------------
+
 openapi: '3.0.3'
 info:
   version: '0.1.0'
   title: Gamification API
-  description: An API to add a gamification process to a simple site with Swagger and Spring Boot
+  description: Description
 security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
-  #APPLICATION REGISTRATION
   /application:
-    parameters:
-      - $ref: '#/components/securitySchemes/apiKeyAuth'
     post:
       description: create a new application
       operationId: newApplication
@@ -24,125 +27,18 @@ paths:
                   type: string
       responses:
         '201':
-          description: Application correctly created
+          description: New application created
           content:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Application'
 
-  # LOGIN
-  /login:
-    post:
-      description: log with credentials
-      operationId: login
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/UserCredentials'
-      responses:
-        '201':
-          description: Login Successful
-        '401':
-          description: Wrong user credentials
-  # USERS
-  /users:
-    post:
-      description: create a user
-      operationId: register
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '201':
-          description: user created
-        '401':
-          description: request error
-        '403':
-          description: username already taken
-  /users/{username}:
-    parameters:
-      - in: path
-        name: username
-        required: true
-        schema:
-          $ref: '#/components/schemas/Username'
-    get:
-      description: get user informations
-      operationId: getUserByUsername
-      responses:
-        '201':
-          description: user informations
-          content:
-            'application/json':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '401':
-          description: username does not exist
-    put:
-      description: change user password
-      operationId: changePassword
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/NewPassword'
-      responses:
-        '201':
-          description: changed password successfully
-        '401':
-          description: Operation failed
-  # EVENTS
-  /events:
-    post:
-      description: create a event
-      operationId: createEvent
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/Event'
-      responses:
-        '201':
-          description: created
-    get:
-      description: get the list of all events
-      operationId: getEvents
-      responses:
-        '200':
-          description: success
-          content:
-            'application/json':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
-  /events/{id}:
-    get:
-      description: get one event, by id
-      operationId: getEvent
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: success
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/Event'
-  # BADGES
   /badges:
     post:
       description: create a badge
       operationId: createBadge
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
       requestBody:
         content:
           'application/json':
@@ -150,10 +46,16 @@ paths:
               $ref: '#/components/schemas/Badge'
       responses:
         '201':
-          description: created
+          description: Badge created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
     get:
-      description: get the list of all badges
+      description: get the list of all badges of the app
       operationId: getBadges
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
       responses:
         '200':
           description: success
@@ -163,11 +65,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Badge'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
   /badges/{id}:
     get:
       description: get one badge, by id
       operationId: getBadge
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
         - in: path
           name: id
           schema:
@@ -180,6 +87,70 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Badge'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+  /users:
+    post:
+      description: create a user
+      operationId: createUser
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+    get:
+      description: get the list of all users of the app
+      operationId: getUsers
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+  /users/{id}:
+    get:
+      description: get one user, by id
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
 
 components:
   securitySchemes:
@@ -190,24 +161,30 @@ components:
     apiKeyAuth:
       type: apiKey
       in: header
-      name: apiKey
+      name: X-API-KEY
   parameters:
-    Apikey:
+    ApiKey:
       description: "Application api key"
-      name: "apiKey"
+      name: "X-API-KEY"
       in: header
       required: true
       schema:
         type: string
   responses:
+    NotFound:
+      description: The specified resource was not found
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
     UnauthorizedError:
-      description: Api key is missing or invalid
+      description: API key is missing or invalid
       headers:
         WWW_Authenticate:
           schema:
             type: string
   schemas:
-    # APPLICATIONS
+    #APPLICATION
     Application:
       type: object
       properties:
@@ -215,55 +192,34 @@ components:
           type: string
         name:
           type: string
-    # EVENTS
-    Event:
+    #BADGE
+    Badge:
       type: object
       properties:
         id:
           type: integer
-          nullable: false
-    # BADGES
-    Badge:
-      type: object
-      properties:
         level:
+          type: string
+        name:
           type: string
         description:
           type: string
-        obtainedOnDate:
+        ObtainedOnDate:
           type: string
           format: date
-          nullable: false
-    # USERS
+    #USER
     User:
       type: object
       properties:
-        username:
+        id:
+          type: integer
+        name:
           type: string
-        firstname:
+        birthdate:
           type: string
-        lastname:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
+          format: date
         reputation:
           type: string
-    UserCredentials:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-    Username:
-      type: object
-      properties:
-        username:
-          type: string
-    NewPassword:
-      type: object
-      properties:
-        newpassword:
-          type: string
+        points:
+          type: integer
+

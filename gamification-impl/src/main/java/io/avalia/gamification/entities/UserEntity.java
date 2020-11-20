@@ -1,5 +1,7 @@
 package io.avalia.gamification.entities;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,23 +10,22 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-public class BadgeEntity implements Serializable {
-
+public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String level;
-
-    @Column
     private String name;
 
     @Column
-    private String description;
+    private String reputation;
 
     @Column
-    private LocalDate obtainedOnDate;
+    private int points;
+
+    @Column
+    private LocalDate birthdate;
 
     @ManyToOne
     private ApplicationEntity app;
