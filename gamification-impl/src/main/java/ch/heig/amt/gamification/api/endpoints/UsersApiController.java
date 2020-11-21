@@ -1,16 +1,13 @@
 package ch.heig.amt.gamification.api.endpoints;
 
-import ch.heig.amt.gamification.entities.UserEntity;
-import ch.heig.amt.gamification.api.UsersApi;
-import ch.heig.amt.gamification.api.model.User;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
+import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
-
+import ch.heig.amt.gamification.api.UsersApi;
+import ch.heig.amt.gamification.api.model.User;
 import io.swagger.annotations.ApiParam;
-
 import org.openapitools.jackson.nullable.JsonNullable;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +79,7 @@ public class UsersApiController implements UsersApi {
         userEntity.setId(user.getId().isPresent() ? user.getId().get() : 1); // TODO set new id if null
         userEntity.setApp(app);
         userEntity.setName(user.getName());
-        userEntity.setPoints(user.getPoints().isPresent() ?  user.getPoints().get() : 0);
+        userEntity.setPoints(user.getPoints());
         userEntity.setBirthdate(user.getBirthdate());
         userEntity.setReputation(user.getReputation().isPresent() ? user.getReputation().get() : "Basic reputation");
 
@@ -93,7 +90,7 @@ public class UsersApiController implements UsersApi {
         User user = new User();
         user.setId(JsonNullable.of(entity.getId()));
         user.setName(entity.getName());
-        user.setPoints(JsonNullable.of(entity.getPoints()));
+        user.setPoints(entity.getPoints());
         user.setReputation(JsonNullable.of(entity.getReputation()));
         user.setBirthdate(entity.getBirthdate());
         return user;

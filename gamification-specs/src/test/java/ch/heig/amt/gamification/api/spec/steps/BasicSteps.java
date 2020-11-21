@@ -1,12 +1,13 @@
 package ch.heig.amt.gamification.api.spec.steps;
+    /*
+import ch.heig.amt.gamification.api.*;
 
-import ch.heig.amt.gamification.ApiException;
-import ch.heig.amt.gamification.ApiResponse;
-import ch.heig.amt.gamification.api.DefaultApi;
-import ch.heig.amt.gamification.api.dto.Application;
-import ch.heig.amt.gamification.api.dto.Badge;
-import ch.heig.amt.gamification.api.dto.InlineObject;
 import ch.heig.amt.gamification.api.spec.helpers.Environment;
+import io.avalia.gamification.ApiException;
+import io.avalia.gamification.ApiResponse;
+import io.avalia.gamification.api.dto.Application;
+import io.avalia.gamification.api.dto.Badge;
+import io.avalia.gamification.api.dto.InlineObject;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -16,8 +17,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
+*/
 
 public class BasicSteps {
+    /*
 
     private Environment environment;
     private DefaultApi api;
@@ -174,5 +177,6 @@ public class BasicSteps {
         lastApiException = apiException;
         lastStatusCode = lastApiException.getCode();
     }
+     */
 
 }

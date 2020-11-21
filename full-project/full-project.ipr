@@ -12,6 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="fruitsSpecification" target="11" />
       <module name="gamification-impl" target="11" />
       <module name="gamification-specs" target="11" />
       <module name="swagger-spring" target="11" />
@@ -21,6 +22,9 @@
     <file url="file://$PROJECT_DIR$/../gamification-impl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../gamification-impl/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../gamification-specs/src/main/resources" charset="UTF-8" />
+  </component>
+  <component name="GoogleJavaFormatSettings">
+    <option name="enabled" value="false" />
   </component>
   <component name="InspectionProjectProfileManager">
     <profile version="1.0">
@@ -44,9 +48,9 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/full-project.iml" filepath="$PROJECT_DIR$/full-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gamification-impl/gamification-impl.iml" filepath="$PROJECT_DIR$/../gamification-impl/gamification-impl.iml" />
       <module fileurl="file://$PROJECT_DIR$/../gamification-specs/gamification-specs.iml" filepath="$PROJECT_DIR$/../gamification-specs/gamification-specs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/full-project.iml" filepath="$PROJECT_DIR$/full-project.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
@@ -1292,6 +1296,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-webmvc/5.2.10.RELEASE/spring-webmvc-5.2.10.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.threeten:threetenbp:1.5.0">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.5.0/threetenbp-1.5.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.5.0/threetenbp-1.5.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.5.0/threetenbp-1.5.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.yaml:snakeyaml:1.26">
