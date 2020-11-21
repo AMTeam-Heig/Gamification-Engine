@@ -13,10 +13,10 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: []
 paths:
-  /applications:
+  /application:
     post:
       description: create a new application
-      operationId: newApplication
+      operationId: createApplication
       requestBody:
         content:
           'application/json':
@@ -168,13 +168,31 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
+  /rules:
+    post:
+      description: create a rule
+      operationId: createRule
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Rule created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
 
 components:
   securitySchemes:
-    #    bearerAuth:            # arbitrary name for the security scheme
-    #      type: http
-    #      scheme: bearer       # warning: it HAS TO be a lowercase b for the swagger ui version used in springfox
-    #      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    #  bearerAuth:         # arbitrary name for the security scheme
+    #  type: http
+    #  scheme: bearer      # warning: it HAS TO be a lowercase b for the swagger ui version used in springfox
+    #  bearerFormat: JWT   # optional, arbitrary value for documentation purposes
     apiKeyAuth:
       type: apiKey
       in: header
@@ -215,6 +233,7 @@ components:
       properties:
         id:
           type: integer
+          nullable: true
         level:
           type: string
         name:
@@ -224,12 +243,14 @@ components:
         ObtainedOnDate:
           type: string
           format: date
+          nullable: true
     #USER
     User:
       type: object
       properties:
         id:
           type: integer
+          nullable: true
         name:
           type: string
         birthdate:
@@ -237,6 +258,24 @@ components:
           format: date
         reputation:
           type: string
+          nullable: true
         points:
           type: integer
-
+    # RULE
+    Rule:
+      type: object
+      properties:
+        name:
+          type: string
+        definition:
+          type: string
+        reputation:
+          type: string
+          nullable: true
+        points:
+          type: integer
+          nullable: true
+        eventId:
+          type: integer
+        badgeId:
+          type: integer

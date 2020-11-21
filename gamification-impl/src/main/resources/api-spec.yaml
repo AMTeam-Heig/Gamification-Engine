@@ -168,6 +168,24 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
+  /rules:
+    post:
+      description: create a rule
+      operationId: createRule
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Rule created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
 
 components:
   securitySchemes:
@@ -243,4 +261,21 @@ components:
           nullable: true
         points:
           type: integer
+    # RULE
+    Rule:
+      type: object
+      properties:
+        name:
+          type: string
+        definition:
+          type: string
+        reputation:
+          type: string
           nullable: true
+        points:
+          type: integer
+          nullable: true
+        eventId:
+          type: integer
+        badgeId:
+          type: integer
