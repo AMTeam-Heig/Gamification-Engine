@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.avalia.gamification</groupId>
+    <groupId>ch.heig.amt.gamification</groupId>
     <artifactId>gamification-impl</artifactId>
     <packaging>jar</packaging>
     <name>gamification-impl</name>
@@ -53,10 +53,10 @@
                                 <swaggerDocketConfig>false</swaggerDocketConfig>
                                 <interfaceOnly>true</interfaceOnly>
                                 <delegatePattern>false</delegatePattern>
-                                <apiPackage>io.avalia.gamification.api</apiPackage>
-                                <configPackage>io.avalia.gamification.config</configPackage>
-                                <basePackage>io.avalia.gamification</basePackage>
-                                <modelPackage>io.avalia.gamification.api.model</modelPackage>
+                                <apiPackage>ch.heig.amt.gamification.api</apiPackage>
+                                <configPackage>ch.heig.amt.gamification.config</configPackage>
+                                <basePackage>ch.heig.amt.gamification</basePackage>
+                                <modelPackage>ch.heig.amt.gamification.api.model</modelPackage>
                             </configOptions>
                         </configuration>
                     </execution>
