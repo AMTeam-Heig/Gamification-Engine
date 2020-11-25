@@ -1,6 +1,10 @@
-![Building and publishing the Docker image](https://github.com/AMTeam-Heig/Gamification-Engine/workflows/Building%20and%20publishing%20the%20Docker%20image/badge.svg)
+![Publishing the Docker image](https://github.com/AMTeam-Heig/Gamification-Engine/workflows/Publishing%20the%20Docker%20image/badge.svg)
 
 # Gamification
+To run the program use the following command:
+```bash
+docker run -p 8080:8080 ghcr.io/amteam-heig/gamification-engine/spring/gamification:latest
+```
 
 # Build and run the Fruit microservice
 
