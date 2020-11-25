@@ -1,0 +1,1 @@
+cp  ../target/gamification-impl-1.0.0.jar  ./artifact/gamification-impl.jar
