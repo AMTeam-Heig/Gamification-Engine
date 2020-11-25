@@ -109,6 +109,65 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
+  /events:
+    post:
+      description: create an event
+      operationId: createEvent
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Event created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+    get:
+      description: get the list of all events of the app
+      operationId: getEvents
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /events/{id}:
+    get:
+      description: get one event, by id
+      operationId: getEvent
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
   /users:
     post:
       description: create a user
@@ -244,6 +303,23 @@ components:
           type: string
           format: date
           nullable: true
+    #EVENT
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        userId:
+          type: integer
+          nullable: true
+        points:
+          type: integer
+          nullable: true
+
     #USER
     User:
       type: object

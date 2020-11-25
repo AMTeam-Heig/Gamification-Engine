@@ -4,27 +4,23 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Data
-public class BadgeEntity implements Serializable {
+public class EventEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String level;
+    private String type;
 
     @Column
-    private String name;
+    private int userId;
 
     @Column
-    private String description;
-
-    @Column
-    private LocalDate obtainedOnDate;
+    private int points;
 
     @ManyToOne
     private ApplicationEntity application;
