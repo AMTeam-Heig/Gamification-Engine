@@ -20,7 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventsApiController implements EventsApi {
@@ -36,6 +36,7 @@ public class EventsApiController implements EventsApi {
         if(applicationEntity != null) {
             EventEntity entity = new EventEntity();
             entity.setId(event.getId().isPresent() ? event.getId().get() : 2);
+            entity.setName(event.getName().get());
             entity.setPoints(event.getPoints().get());
             entity.setType(event.getType().get());
             entity.setUserId(event.getUserId().get());
@@ -52,10 +53,11 @@ public class EventsApiController implements EventsApi {
     }
 
     public ResponseEntity<List<Event>> getEvents(@RequestHeader(value = "X-API-KEY") String xApiKey) {
-        List<Event> events = new LinkedList<>();
-        for(EventEntity eventEntity : eventRepository.findAllByAppApiKey(xApiKey)) {
+        List<Event> events = new ArrayList<>();
+        for(EventEntity eventEntity : eventRepository.findAllByApplication_ApiKey(xApiKey)) {
             Event event = new Event();
             event.setId(JsonNullable.of(eventEntity.getId()));
+            event.setName(JsonNullable.of(eventEntity.getName()));
             event.setPoints(JsonNullable.of(eventEntity.getPoints()));
             event.setType(JsonNullable.of(eventEntity.getType()));
             event.setUserId(JsonNullable.of(eventEntity.getUserId()));
@@ -68,12 +70,14 @@ public class EventsApiController implements EventsApi {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if(applicationEntity != null) {
             String idStr = String.valueOf(id);
-            EventEntity existingEventEntity = eventRepository.findByNameAndAppApiKey(idStr, xApiKey);
+            EventEntity existingEventEntity = eventRepository.findByIdAndApplication_ApiKey(idStr, xApiKey);
             if(existingEventEntity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
+
             Event event = new Event();
             event.setId(JsonNullable.of(existingEventEntity.getId()));
+            event.setName(JsonNullable.of(existingEventEntity.getName()));
             event.setUserId(JsonNullable.of(existingEventEntity.getUserId()));
             event.setType(JsonNullable.of(existingEventEntity.getType()));
             event.setPoints(JsonNullable.of(existingEventEntity.getPoints()));

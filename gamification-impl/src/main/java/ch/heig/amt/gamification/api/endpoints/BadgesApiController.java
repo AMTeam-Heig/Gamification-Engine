@@ -22,7 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -51,8 +51,8 @@ public class BadgesApiController implements BadgesApi {
     }
 
     public ResponseEntity<List<Badge>> getBadges(@RequestHeader(value = "X-API-KEY") String xApiKey) {
-        List<Badge> badges = new LinkedList<>();
-        for (BadgeEntity badgeEntity : badgeRepository.findAllByAppApiKey(xApiKey)) {
+        List<Badge> badges = new ArrayList<>();
+        for (BadgeEntity badgeEntity : badgeRepository.findAllByApplication_ApiKey(xApiKey)) {
             badges.add(toBadge(badgeEntity));
         }
         return ResponseEntity.ok(badges);
@@ -64,7 +64,7 @@ public class BadgesApiController implements BadgesApi {
             String idStr = String.valueOf(id);
 
             BadgeEntity existingBadgeEntity = badgeRepository
-                    .findByNameAndAppApiKey(idStr, xApiKey);
+                    .findByIdAndApplication_ApiKey(idStr, xApiKey);
             if(existingBadgeEntity == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }

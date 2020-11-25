@@ -4,6 +4,6 @@ import ch.heig.amt.gamification.entities.BadgeEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface BadgeRepository extends CrudRepository<BadgeEntity, Long> {
-    Iterable<BadgeEntity> findAllByAppApiKey(String apiKey);
-    BadgeEntity findByNameAndAppApiKey(String name, String ApiKey);
+    Iterable<BadgeEntity> findAllByApplication_ApiKey(String apiKey);
+    BadgeEntity findByIdAndApplication_ApiKey(String name, String apiKey);
 }
