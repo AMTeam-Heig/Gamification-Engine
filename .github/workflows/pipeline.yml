@@ -37,7 +37,9 @@ jobs:
             ${{ runner.os }}-maven-
        
       - name: Build with maven
-        run: mvn clean package
+        run:  |
+           cd  gamification-impl 
+           mvn clean package
      
    
       - name: Building the Docker image
@@ -45,7 +47,7 @@ jobs:
         run: |
            echo ${{ secrets.KEYAPT }} | docker login ghcr.io -u ChickenLivesMatter --password-stdin
 
-           cd  gamification-impl/docker/
+           cd  docker/
            chmod 777 script_moveArtifact.sh
            ./script.sh
            docker build -t spring/gamification  .
