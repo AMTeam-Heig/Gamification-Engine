@@ -1,6 +1,6 @@
 # This workflow is a pipeline of multiple actions ,it is   triggered  for commits and pull on master branch
 
-name: Building and publishing the Docker image
+name:  Publishing the Docker image
 
 on:
   # triggered on push and pull_request on master branch
@@ -45,7 +45,7 @@ jobs:
       - name: Building the Docker image
       
         run: |
-           echo ${{ secrets.KEYAPT }} | docker login ghcr.io -u ChickenLivesMatter --password-stdin
+           echo ${{ secrets.ATG }} | docker login ghcr.io -u ChickenLivesMatter --password-stdin
 
            cd  docker/
            chmod 777 script_moveArtifact.sh
