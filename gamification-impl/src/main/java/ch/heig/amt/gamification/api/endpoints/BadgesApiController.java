@@ -22,7 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -35,10 +35,10 @@ public class BadgesApiController implements BadgesApi {
 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Badge badge) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
             BadgeEntity newBadgeEntity = toBadgeEntity(badge);
-            newBadgeEntity.setApp(app);
+            newBadgeEntity.setApplication(applicationEntity);
             badgeRepository.save(newBadgeEntity);
 
             URI location = ServletUriComponentsBuilder
@@ -51,7 +51,7 @@ public class BadgesApiController implements BadgesApi {
     }
 
     public ResponseEntity<List<Badge>> getBadges(@RequestHeader(value = "X-API-KEY") String xApiKey) {
-        List<Badge> badges = new ArrayList<>();
+        List<Badge> badges = new LinkedList<>();
         for (BadgeEntity badgeEntity : badgeRepository.findAllByAppApiKey(xApiKey)) {
             badges.add(toBadge(badgeEntity));
         }
