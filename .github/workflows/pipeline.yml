@@ -49,7 +49,7 @@ jobs:
 
            cd  gamification-impl/docker
            chmod 777 script_moveArtifact.sh
-           ./script.sh
+           ./script_moveArtifact.sh
            docker build -t spring/gamification  .
            docker tag spring/gamification  ghcr.io/amteam-heig/gamification-Engine/spring/gamification:latest
            docker push ghcr.io/amteam-heig/gamification-Engine/spring/gamificationlatest
