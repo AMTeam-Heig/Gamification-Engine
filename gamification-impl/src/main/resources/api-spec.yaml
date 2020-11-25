@@ -12,6 +12,7 @@ info:
 security:
   #  - bearerAuth: []
   - apiKeyAuth: []
+    
 paths:
   /application:
     post:
