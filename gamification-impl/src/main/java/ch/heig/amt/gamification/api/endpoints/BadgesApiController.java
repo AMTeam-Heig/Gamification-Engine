@@ -37,18 +37,22 @@ public class BadgesApiController implements BadgesApi {
     public ResponseEntity<Void> createBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Badge badge) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
-            BadgeEntity entity = new BadgeEntity();
-            entity.setName(badge.getName());
-            entity.setDescription(badge.getDescription());
-            entity.setObtainedOnDate(badge.getObtainedOnDate());
-            entity.setApplicationEntity(applicationEntity);
-            badgeRepository.save(entity);
+            if(badgeRepository.findByNameAndApplicationEntity_ApiKey(badge.getName(),xApiKey) == null)
+            {
+                BadgeEntity entity = new BadgeEntity();
+                entity.setName(badge.getName());
+                entity.setDescription(badge.getDescription());
+                entity.setObtainedOnDate(badge.getObtainedOnDate());
+                entity.setApplicationEntity(applicationEntity);
+                badgeRepository.save(entity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{name}")
-                    .buildAndExpand(entity.getName()).toUri();
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{name}")
+                        .buildAndExpand(entity.getName()).toUri();
 
-            return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).build();
+            }
+
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

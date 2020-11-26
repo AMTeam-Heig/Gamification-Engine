@@ -40,21 +40,22 @@ public class EventsApiController implements EventsApi {
     public ResponseEntity<Void> createEvent(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "") @Valid @RequestBody(required = true) Event event) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if(applicationEntity != null) {
-            EventEntity entity = new EventEntity();
-            entity.setName(event.getName());
-            entity.setPoints(event.getPoints());
-            entity.setType(event.getType());
-            entity.setUsername(event.getUsername());
+            if(eventRepository.findByNameAndApplicationEntity_ApiKey(event.getName(),xApiKey) == null) {
+                EventEntity entity = new EventEntity();
+                entity.setName(event.getName());
+                entity.setPoints(event.getPoints());
+                entity.setUsername(event.getUsername());
 
-            entity.setApplicationEntity(applicationEntity);
-            eventRepository.save(entity);
+                entity.setApplicationEntity(applicationEntity);
+                eventRepository.save(entity);
 
-            eventProcessor.process(xApiKey, entity);
+                eventProcessor.process(xApiKey, entity);
 
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{name}")
-                    .buildAndExpand(entity.getName()).toUri();
+                URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{name}")
+                        .buildAndExpand(entity.getName()).toUri();
 
-            return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -65,7 +66,6 @@ public class EventsApiController implements EventsApi {
             Event event = new Event();
             event.setName(eventEntity.getName());
             event.setPoints(eventEntity.getPoints());
-            event.setType(eventEntity.getType());
             event.setUsername(eventEntity.getUsername());
             events.add(event);
         }
@@ -83,7 +83,6 @@ public class EventsApiController implements EventsApi {
             Event event = new Event();
             event.setName(existingEventEntity.getName());
             event.setUsername(existingEventEntity.getUsername());
-            event.setType(existingEventEntity.getType());
             event.setPoints(existingEventEntity.getPoints());
             return ResponseEntity.ok(event);
         }

@@ -17,9 +17,6 @@ public class EventEntity implements Serializable {
     private String name;
 
     @Column
-    private String type;
-
-    @Column
     private String username;
 
     @Column

@@ -34,22 +34,24 @@ public class RulesApiController implements RulesApi {
     public ResponseEntity<Void> createRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Rule rule) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
-            RuleEntity ruleEntity = new RuleEntity();
-            ruleEntity.setName(rule.getName());
-            ruleEntity.setDefinition(rule.getDefinition());
-            ruleEntity.setPoints(rule.getPoints());
-            ruleEntity.setReputation(rule.getReputation());
-            ruleEntity.setEventName(rule.getEventName());
-            ruleEntity.setBadgeName(rule.getBadgeName());
-            ruleEntity.setApplicationEntity(applicationEntity);
+            if(ruleRepository.findByNameAndApplicationEntity_ApiKey(rule.getName(),xApiKey) == null) {
+                RuleEntity ruleEntity = new RuleEntity();
+                ruleEntity.setName(rule.getName());
+                ruleEntity.setDefinition(rule.getDefinition());
+                ruleEntity.setPoints(rule.getPoints());
+                ruleEntity.setReputation(rule.getReputation());
+                ruleEntity.setEventName(rule.getEventName());
+                ruleEntity.setBadgeName(rule.getBadgeName());
+                ruleEntity.setApplicationEntity(applicationEntity);
 
-            ruleRepository.save(ruleEntity);
+                ruleRepository.save(ruleEntity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{name}")
-                    .buildAndExpand(ruleEntity.getName()).toUri();
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{name}")
+                        .buildAndExpand(ruleEntity.getName()).toUri();
 
-            return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

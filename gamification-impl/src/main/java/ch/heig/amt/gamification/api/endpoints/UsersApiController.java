@@ -9,6 +9,7 @@ import ch.heig.amt.gamification.repositories.UserRepository;
 import ch.heig.amt.gamification.api.UsersApi;
 import ch.heig.amt.gamification.api.model.User;
 import io.swagger.annotations.ApiParam;
+import org.h2.security.auth.AuthenticationInfo;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,12 +40,14 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<Void> createUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) User user) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setApplicationEntity(applicationEntity);
-            userEntity.setUsername(user.getUsername());
-            userEntity.setPoints(user.getPoints());
-            userEntity.setBirthdate(user.getBirthdate());
-            userEntity.setReputation(user.getReputation());
+            if(userRepository.findByUsernameAndApplicationEntity_ApiKey(user.getUsername(),xApiKey) == null) {
+                UserEntity userEntity = new UserEntity();
+                userEntity.setApplicationEntity(applicationEntity);
+                userEntity.setUsername(user.getUsername());
+                userEntity.setPoints(user.getPoints());
+                userEntity.setBirthdate(user.getBirthdate());
+                userEntity.setReputation(user.getReputation());
+
 
             /*List<BadgeEntity> badgeEntities = new LinkedList<>();
             for(Badge b : user.getBadges()){
@@ -58,13 +61,14 @@ public class UsersApiController implements UsersApi {
 
             userEntity.setBadgeEntity(badgeEntities);*/
 
-            userRepository.save(userEntity);
+                userRepository.save(userEntity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{username}")
-                    .buildAndExpand(userEntity.getUsername()).toUri();
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{username}")
+                        .buildAndExpand(userEntity.getUsername()).toUri();
 
-            return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -104,5 +108,26 @@ public class UsersApiController implements UsersApi {
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("username") String username) {
+
+        UserEntity userEntity = userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey);
+
+        if(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey) != null) {
+            userEntity.setUsername(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getUsername());
+            userEntity.setReputation(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getReputation());
+            userEntity.setBirthdate(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getBirthdate());
+            userEntity.setPoints(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getPoints());
+            userEntity.setId(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getId());
+            userEntity.setApplicationEntity(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getApplicationEntity());
+            userRepository.deleteById(userEntity.getId());
+
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
