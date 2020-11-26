@@ -291,8 +291,6 @@ components:
     Badge:
       type: object
       properties:
-        level:
-          type: string
         name:
           type: string
         description:
@@ -308,11 +306,10 @@ components:
           type: string
         type:
           type: string
-        userId:
-          type: integer
+        username:
+          type: string
         points:
           type: integer
-
     #USER
     User:
       type: object
@@ -338,7 +335,7 @@ components:
           type: string
         points:
           type: integer
-        eventId:
-          type: integer
-        badgeId:
-          type: integer
+        eventName:
+          type: string
+        badgeName:
+          type: string

@@ -6,11 +6,13 @@ import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.EventEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.EventRepository;
+import ch.heig.amt.gamification.services.EventProcessor;
 import io.swagger.annotations.ApiParam;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,12 +25,16 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+@Controller
 public class EventsApiController implements EventsApi {
     @Autowired
     EventRepository eventRepository;
 
     @Autowired
     ApplicationRepository applicationRepository;
+
+    @Autowired
+    EventProcessor eventProcessor;
 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createEvent(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "") @Valid @RequestBody(required = true) Event event) {
@@ -38,10 +44,12 @@ public class EventsApiController implements EventsApi {
             entity.setName(event.getName());
             entity.setPoints(event.getPoints());
             entity.setType(event.getType());
-            entity.setUserId(event.getUserId());
+            entity.setUsername(event.getUsername());
 
             entity.setApplicationEntity(applicationEntity);
             eventRepository.save(entity);
+
+            eventProcessor.process(xApiKey, entity);
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{name}")
                     .buildAndExpand(entity.getName()).toUri();
@@ -58,7 +66,7 @@ public class EventsApiController implements EventsApi {
             event.setName(eventEntity.getName());
             event.setPoints(eventEntity.getPoints());
             event.setType(eventEntity.getType());
-            event.setUserId(eventEntity.getUserId());
+            event.setUsername(eventEntity.getUsername());
             events.add(event);
         }
         return ResponseEntity.ok(events);
@@ -74,7 +82,7 @@ public class EventsApiController implements EventsApi {
 
             Event event = new Event();
             event.setName(existingEventEntity.getName());
-            event.setUserId(existingEventEntity.getUserId());
+            event.setUsername(existingEventEntity.getUsername());
             event.setType(existingEventEntity.getType());
             event.setPoints(existingEventEntity.getPoints());
             return ResponseEntity.ok(event);

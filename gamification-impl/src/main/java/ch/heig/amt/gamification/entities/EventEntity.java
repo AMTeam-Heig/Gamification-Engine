@@ -20,7 +20,7 @@ public class EventEntity implements Serializable {
     private String type;
 
     @Column
-    private int userId;
+    private String username;
 
     @Column
     private int points;

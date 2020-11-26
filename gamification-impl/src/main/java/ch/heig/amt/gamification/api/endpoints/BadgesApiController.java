@@ -38,7 +38,6 @@ public class BadgesApiController implements BadgesApi {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
             BadgeEntity entity = new BadgeEntity();
-            entity.setLevel(badge.getLevel());
             entity.setName(badge.getName());
             entity.setDescription(badge.getDescription());
             entity.setObtainedOnDate(badge.getObtainedOnDate());
@@ -58,7 +57,6 @@ public class BadgesApiController implements BadgesApi {
         List<Badge> badges = new ArrayList<>();
         for (BadgeEntity badgeEntity : badgeRepository.findAllByApplicationEntity_ApiKey(xApiKey)) {
             Badge badge = new Badge();
-            badge.setLevel(badgeEntity.getLevel());
             badge.setName(badgeEntity.getName());
             badge.setDescription(badgeEntity.getDescription());
             badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());
@@ -78,7 +76,6 @@ public class BadgesApiController implements BadgesApi {
             }
 
             Badge badge = new Badge();
-            badge.setLevel(badgeEntity.getLevel());
             badge.setName(badgeEntity.getName());
             badge.setDescription(badgeEntity.getDescription());
             badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());

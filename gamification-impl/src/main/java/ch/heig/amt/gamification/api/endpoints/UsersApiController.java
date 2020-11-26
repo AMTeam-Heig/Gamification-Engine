@@ -1,6 +1,8 @@
 package ch.heig.amt.gamification.api.endpoints;
 
+import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
+import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -42,6 +45,18 @@ public class UsersApiController implements UsersApi {
             userEntity.setPoints(user.getPoints());
             userEntity.setBirthdate(user.getBirthdate());
             userEntity.setReputation(user.getReputation());
+
+            /*List<BadgeEntity> badgeEntities = new LinkedList<>();
+            for(Badge b : user.getBadges()){
+                BadgeEntity badgeEntity = new BadgeEntity();
+                badgeEntity.setApplicationEntity(applicationEntity);
+                badgeEntity.setDescription(b.getDescription());
+                badgeEntity.setName(b.getName());
+                badgeEntity.setObtainedOnDate(b.getObtainedOnDate());
+                badgeEntities.add(badgeEntity);
+            }
+
+            userEntity.setBadgeEntity(badgeEntities);*/
 
             userRepository.save(userEntity);
 

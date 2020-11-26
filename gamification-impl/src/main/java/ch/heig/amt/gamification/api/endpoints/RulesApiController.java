@@ -11,6 +11,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
+@Controller
 public class RulesApiController implements RulesApi {
     @Autowired
     ApplicationRepository applicationRepository;
@@ -37,8 +39,8 @@ public class RulesApiController implements RulesApi {
             ruleEntity.setDefinition(rule.getDefinition());
             ruleEntity.setPoints(rule.getPoints());
             ruleEntity.setReputation(rule.getReputation());
-            ruleEntity.setEventId(rule.getEventId());
-            ruleEntity.setBadgeId(rule.getBadgeId());
+            ruleEntity.setEventName(rule.getEventName());
+            ruleEntity.setBadgeName(rule.getBadgeName());
             ruleEntity.setApplicationEntity(applicationEntity);
 
             ruleRepository.save(ruleEntity);
@@ -66,8 +68,8 @@ public class RulesApiController implements RulesApi {
             rule.setDefinition(ruleEntity.getDefinition());
             rule.setPoints(ruleEntity.getPoints());
             rule.setReputation(ruleEntity.getReputation());
-            rule.setEventId(ruleEntity.getEventId());
-            rule.setBadgeId(ruleEntity.getBadgeId());
+            rule.setEventName(ruleEntity.getEventName());
+            rule.setBadgeName(ruleEntity.getBadgeName());
             return ResponseEntity.ok(rule);
         }
 
