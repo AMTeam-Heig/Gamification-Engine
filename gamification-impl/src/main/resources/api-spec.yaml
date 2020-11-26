@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/Application'
     get:
       description: get the list of all app by apikey
-      operationId: getApplications
+      operationId: getApplication
       parameters:
         - $ref: '#/components/parameters/ApiKey'
       responses:
