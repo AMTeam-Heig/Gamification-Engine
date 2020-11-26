@@ -34,8 +34,10 @@ public class ApplicationApiController implements ApplicationApi {
 
     public ResponseEntity<List<Application>> getApplication(String xApiKey) {
         List<Application> applications = new LinkedList<>();
-        applications.get(0).setApiKey(xApiKey);
-        applications.get(0).setName(applicationRepository.findByApiKey(xApiKey).getName());
+        Application application = new Application();
+        application.setName(applicationRepository.findByApiKey(xApiKey).getName());
+        application.setApiKey(xApiKey);
+        applications.add(application);
         return ResponseEntity.ok(applications);
     }
 }
