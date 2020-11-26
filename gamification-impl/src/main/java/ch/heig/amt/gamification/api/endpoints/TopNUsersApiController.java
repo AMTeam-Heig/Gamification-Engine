@@ -8,11 +8,13 @@ import ch.heig.amt.gamification.repositories.UserRepository;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Controller
 public class TopNUsersApiController implements TopNUsersApi {
     @Autowired
     UserRepository userRepository;
