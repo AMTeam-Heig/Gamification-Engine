@@ -31,6 +31,6 @@ public class RuleEntity implements Serializable {
     private int badgeId;
 
     @ManyToOne
-    private ApplicationEntity app;
+    private ApplicationEntity applicationEntity;
 
 }

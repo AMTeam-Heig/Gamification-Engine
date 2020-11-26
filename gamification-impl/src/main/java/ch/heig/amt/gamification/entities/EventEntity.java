@@ -26,5 +26,5 @@ public class EventEntity implements Serializable {
     private int points;
 
     @ManyToOne
-    private ApplicationEntity application;
+    private ApplicationEntity applicationEntity;
 }

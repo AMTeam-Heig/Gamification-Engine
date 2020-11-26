@@ -87,9 +87,9 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
-  /badges/{id}:
+  /badges/{name}:
     get:
-      description: get one badge, by id
+      description: get one badge, by name
       operationId: getBadge
       parameters:
         - $ref: '#/components/parameters/ApiKey'
@@ -146,9 +146,9 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
-  /events/{id}:
+  /events/{name}:
     get:
-      description: get one event, by id
+      description: get one event, by name
       operationId: getEvent
       parameters:
         - $ref: '#/components/parameters/ApiKey'
@@ -206,9 +206,9 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /users/{id}:
+  /users/{username}:
     get:
-      description: get one user, by id
+      description: get one user, by username
       operationId: getUser
       parameters:
         - $ref: '#/components/parameters/ApiKey'
@@ -291,9 +291,6 @@ components:
     Badge:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
         level:
           type: string
         name:
@@ -303,42 +300,30 @@ components:
         ObtainedOnDate:
           type: string
           format: date
-          nullable: true
     #EVENT
     Event:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
         name:
           type: string
-          nullable: true
         type:
           type: string
-          nullable: true
         userId:
           type: integer
-          nullable: true
         points:
           type: integer
-          nullable: true
 
     #USER
     User:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
-        name:
+        username:
           type: string
         birthdate:
           type: string
           format: date
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
     # RULE
@@ -351,10 +336,8 @@ components:
           type: string
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
-          nullable: true
         eventId:
           type: integer
         badgeId:

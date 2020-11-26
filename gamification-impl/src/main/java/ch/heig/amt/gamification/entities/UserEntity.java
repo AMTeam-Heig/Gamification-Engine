@@ -18,7 +18,7 @@ public class UserEntity implements Serializable {
     private int id;
 
     @Column
-    private String name;
+    private String username;
 
     @Column
     private String reputation;
@@ -30,5 +30,5 @@ public class UserEntity implements Serializable {
     private LocalDate birthdate;
 
     @ManyToOne
-    private ApplicationEntity app;
+    private ApplicationEntity applicationEntity;
 }

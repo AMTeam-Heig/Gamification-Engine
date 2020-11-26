@@ -27,5 +27,5 @@ public class BadgeEntity implements Serializable {
     private LocalDate obtainedOnDate;
 
     @ManyToOne
-    private ApplicationEntity application;
+    private ApplicationEntity applicationEntity;
 }
