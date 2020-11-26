@@ -2,7 +2,9 @@ package ch.heig.amt.gamification.api.endpoints;
 
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
+import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
+import ch.heig.amt.gamification.repositories.UserEvolutionRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
 import ch.heig.amt.gamification.api.UsersApi;
 import ch.heig.amt.gamification.api.model.User;
@@ -30,6 +32,9 @@ public class UsersApiController implements UsersApi {
     UserRepository userRepository;
 
     @Autowired
+    UserEvolutionRepository userEvolutionRepository;
+
+    @Autowired
     ApplicationRepository applicationRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,8 +42,12 @@ public class UsersApiController implements UsersApi {
         ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
         if (app != null) {
             UserEntity newUserEntity = toUserEntity(user, app);
+            UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
+            userEvolutionEntity.setUser(newUserEntity);
+
             newUserEntity.setApp(app);
             userRepository.save(newUserEntity);
+            userEvolutionRepository.save(userEvolutionEntity);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
