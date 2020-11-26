@@ -94,9 +94,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: name
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -153,9 +153,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: name
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -213,9 +213,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: username
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
