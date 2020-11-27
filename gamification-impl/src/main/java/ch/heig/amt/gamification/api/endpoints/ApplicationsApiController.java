@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,12 +39,25 @@ public class ApplicationsApiController implements ApplicationsApi {
         return ResponseEntity.created(location).build();
     }
 
-    public ResponseEntity<List<Application>> getApplication(String xApiKey) {
+    @Override
+    public ResponseEntity<List<Application>> getApplications() {
         List<Application> applications = new LinkedList<>();
-        Application application = new Application();
-        application.setName(applicationRepository.findByApiKey(xApiKey).getName());
-        application.setApiKey(xApiKey);
-        applications.add(application);
+        for (ApplicationEntity applicationEntity : applicationRepository.findAll()) {
+            Application application = new Application();
+            application.setName(applicationEntity.getName());
+            application.setApiKey(applicationEntity.getApiKey());
+
+            applications.add(application);
+        }
         return ResponseEntity.ok(applications);
+    }
+
+    @Override
+    public ResponseEntity<Application> getApplication(@ApiParam(value = "",required=true) @PathVariable("name") String name) {
+        Application application = new Application();
+        application.setName(name);
+        application.setApiKey(applicationRepository.findByName(name).getApiKey());
+
+        return ResponseEntity.ok(application);
     }
 }

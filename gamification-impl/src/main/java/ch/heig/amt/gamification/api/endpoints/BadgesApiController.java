@@ -70,8 +70,8 @@ public class BadgesApiController implements BadgesApi {
     }
 
     public ResponseEntity<Badge> getBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("name") String name) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
 
             BadgeEntity badgeEntity = badgeRepository
                     .findByNameAndApplicationEntity_ApiKey(name, xApiKey);

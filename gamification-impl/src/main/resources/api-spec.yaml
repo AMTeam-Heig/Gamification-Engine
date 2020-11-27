@@ -36,8 +36,6 @@ paths:
     get:
       description: get the list of all app by apikey
       operationId: getApplications
-      parameters:
-        - $ref: '#/components/parameters/ApiKey'
       responses:
         '200':
           description: success
@@ -56,7 +54,6 @@ paths:
       description: get one application, by name
       operationId: getApplication
       parameters:
-        - $ref: '#/components/parameters/ApiKey'
         - in: path
           name: name
           schema:
