@@ -10,6 +10,9 @@ import java.util.List;
 @Data
 public class UserEvolutionEntity implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @OneToOne
     private UserEntity user;
 

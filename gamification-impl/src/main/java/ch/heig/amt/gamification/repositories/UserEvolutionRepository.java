@@ -4,6 +4,6 @@ import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserEvolutionRepository extends CrudRepository<UserEvolutionEntity, UserEntity> {
+public interface UserEvolutionRepository extends CrudRepository<UserEvolutionEntity, Integer> {
     UserEvolutionEntity findByUser(UserEntity userEntity);
 }
