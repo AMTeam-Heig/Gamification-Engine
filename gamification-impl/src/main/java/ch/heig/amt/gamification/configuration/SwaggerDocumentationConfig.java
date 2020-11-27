@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -12,6 +13,8 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+
+import java.util.Arrays;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-11-19T13:42:22.997Z[GMT]")
 @Configuration
@@ -30,6 +33,7 @@ public class SwaggerDocumentationConfig {
                     .build()
                 .directModelSubstitute(org.threeten.bp.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.threeten.bp.OffsetDateTime.class, java.util.Date.class)
+                .securitySchemes(Arrays.asList(apiKey()))
                 .apiInfo(apiInfo());
     }
     @Bean
@@ -43,6 +47,10 @@ public class SwaggerDocumentationConfig {
                 .license(new License()
                     .name("")
                     .url("http://unlicense.org")));
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("X-API-KEY", "Authorization", "header");
     }
 
 }
