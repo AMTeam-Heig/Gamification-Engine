@@ -2,12 +2,12 @@ package ch.heig.amt.gamification.api.spec.steps;
 
 import ch.heig.amt.gamification.api.*;
 
+import ch.heig.amt.gamification.api.dto.NewApplication;
 import ch.heig.amt.gamification.api.spec.helpers.Environment;
 import ch.heig.amt.gamification.ApiException;
 import ch.heig.amt.gamification.ApiResponse;
 import ch.heig.amt.gamification.api.dto.Application;
 import ch.heig.amt.gamification.api.dto.Badge;
-import ch.heig.amt.gamification.api.dto.InlineObject;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,6 +23,7 @@ public class BasicSteps {
     private Environment environment;
     private DefaultApi api;
 
+    private NewApplication application;
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
@@ -33,7 +34,6 @@ public class BasicSteps {
     private String lastReceivedApiKey = "";
 
     Badge badge;
-    InlineObject application;
 
     private Badge lastReceivedBadge;
     private Application lastReceivedApplication;
@@ -50,7 +50,7 @@ public class BasicSteps {
 
     @Given("I have an application payload")
     public void i_have_an_application_payload() {
-        application = new ch.heig.amt.gamification.api.dto.InlineObject().name("New Application");
+        application = new ch.heig.amt.gamification.api.dto.NewApplication().name("New Application");
     }
     @When("^I POST the application payload to the /applications endpoint$")
     public void i_POST_the_application_payload_to_the_application_endpoint() throws Throwable {
