@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class ApplicationApiController implements ApplicationApi {
@@ -19,26 +21,23 @@ public class ApplicationApiController implements ApplicationApi {
     ApplicationRepository applicationRepository;
 
     public ResponseEntity<Application> createApplication(@ApiParam(value = "", required = true) @Valid @RequestBody InlineObject inlineObject) {
-        ApplicationEntity appEntity = new ApplicationEntity();
-        appEntity.setApiKey(ApplicationEntity.generateApiKey());
-        appEntity.setName(inlineObject.getName());
-        applicationRepository.save(appEntity);
+        ApplicationEntity applicationEntity = new ApplicationEntity();
+        applicationEntity.setApiKey(ApplicationEntity.generateApiKey());
+        applicationEntity.setName(inlineObject.getName());
+        applicationRepository.save(applicationEntity);
 
-        Application app = new Application();
-        app.setName(appEntity.getName());
-        app.setApiKey(appEntity.getApiKey());
-        return ResponseEntity.ok(app);
-    }
-
-    public ResponseEntity<Application> getApplication(String xApiKey) {
-        Application applications = toApplication(applicationRepository.findByApiKey(xApiKey));
-        return ResponseEntity.ok(applications);
-    }
-
-    private Application toApplication(ApplicationEntity entity) {
         Application application = new Application();
-        application.setApiKey(entity.getApiKey());
-        application.setName(entity.getName());
-        return application;
+        application.setName(applicationEntity.getName());
+        application.setApiKey(applicationEntity.getApiKey());
+        return ResponseEntity.ok(application);
+    }
+
+    public ResponseEntity<List<Application>> getApplication(String xApiKey) {
+        List<Application> applications = new LinkedList<>();
+        Application application = new Application();
+        application.setName(applicationRepository.findByApiKey(xApiKey).getName());
+        application.setApiKey(xApiKey);
+        applications.add(application);
+        return ResponseEntity.ok(applications);
     }
 }

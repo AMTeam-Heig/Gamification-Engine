@@ -25,12 +25,12 @@ public class RuleEntity implements Serializable {
     private int points;
 
     @Column
-    private int eventId;
+    private String eventName;
 
     @Column
-    private int badgeId;
+    private String badgeName;
 
     @ManyToOne
-    private ApplicationEntity app;
+    private ApplicationEntity applicationEntity;
 
 }

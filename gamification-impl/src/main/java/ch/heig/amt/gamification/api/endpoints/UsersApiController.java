@@ -1,6 +1,8 @@
 package ch.heig.amt.gamification.api.endpoints;
 
+import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
+import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
@@ -9,6 +11,7 @@ import ch.heig.amt.gamification.repositories.UserRepository;
 import ch.heig.amt.gamification.api.UsersApi;
 import ch.heig.amt.gamification.api.model.User;
 import io.swagger.annotations.ApiParam;
+import org.h2.security.auth.AuthenticationInfo;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -39,69 +43,99 @@ public class UsersApiController implements UsersApi {
 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) User user) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
-            UserEntity newUserEntity = toUserEntity(user, app);
-            UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
-            userEvolutionEntity.setUser(newUserEntity);
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
+            if(userRepository.findByUsernameAndApplicationEntity_ApiKey(user.getUsername(),xApiKey) == null) {
+                UserEntity userEntity = new UserEntity();
+                userEntity.setApplicationEntity(applicationEntity);
+                userEntity.setUsername(user.getUsername());
+                userEntity.setPoints(user.getPoints());
+                userEntity.setBirthdate(user.getBirthdate());
+                userEntity.setReputation(user.getReputation());
 
-            newUserEntity.setApp(app);
-            userRepository.save(newUserEntity);
-            userEvolutionRepository.save(userEvolutionEntity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(newUserEntity.getId()).toUri();
+            /*List<BadgeEntity> badgeEntities = new LinkedList<>();
+            for(Badge b : user.getBadges()){
+                BadgeEntity badgeEntity = new BadgeEntity();
+                badgeEntity.setApplicationEntity(applicationEntity);
+                badgeEntity.setDescription(b.getDescription());
+                badgeEntity.setName(b.getName());
+                badgeEntity.setObtainedOnDate(b.getObtainedOnDate());
+                badgeEntities.add(badgeEntity);
+            }
 
-            return ResponseEntity.created(location).build();
+            userEntity.setBadgeEntity(badgeEntities);*/
+
+                UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
+                userEvolutionEntity.setUser(userEntity);
+                userRepository.save(userEntity);
+                userEvolutionRepository.save(userEvolutionEntity);
+
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{username}")
+                        .buildAndExpand(userEntity.getUsername()).toUri();
+
+                return ResponseEntity.created(location).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+
     public ResponseEntity<List<User>> getUsers(@RequestHeader(value = "X-API-KEY") String xApiKey) {
         List<User> users = new ArrayList<>();
-        for (UserEntity userEntity : userRepository.findAllByAppApiKey(xApiKey)) {
-            users.add(toUser(userEntity));
+        for (UserEntity userEntity : userRepository.findAllByApplicationEntity_ApiKey(xApiKey)) {
+            User user = new User();
+            user.setUsername(userEntity.getUsername());
+            user.setPoints(userEntity.getPoints());
+            user.setReputation(userEntity.getReputation());
+            user.setBirthdate(userEntity.getBirthdate());
+            users.add(user);
         }
         return ResponseEntity.ok(users);
     }
 
-    public ResponseEntity<User> getUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("id") int id) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
-            String idStr = String.valueOf(id);
+    public ResponseEntity<User> getUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("username") String username) {
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
 
             UserEntity userEntity = userRepository
-                    .findByNameAndAppApiKey(idStr, xApiKey);
+                    .findByUsernameAndApplicationEntity_ApiKey(username, xApiKey);
             if(userEntity == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
-            return ResponseEntity.ok(toUser(userEntity));
+            userEntity.setApplicationEntity(applicationEntity);
+
+            User user = new User();
+            user.setUsername(userEntity.getUsername());
+            user.setPoints(userEntity.getPoints());
+            user.setReputation(userEntity.getReputation());
+            user.setBirthdate(userEntity.getBirthdate());
+
+            return ResponseEntity.ok(user);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    private UserEntity toUserEntity(User user, ApplicationEntity app) {
-        UserEntity userEntity = new UserEntity();
+    @Override
+    public ResponseEntity<Void> deleteUser(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("username") String username) {
 
-        userEntity.setId(user.getId().isPresent() ? user.getId().get() : 1); // TODO set new id if null
-        userEntity.setApp(app);
-        userEntity.setName(user.getName());
-        userEntity.setPoints(user.getPoints());
-        userEntity.setBirthdate(user.getBirthdate());
-        userEntity.setReputation(user.getReputation().isPresent() ? user.getReputation().get() : "Basic reputation");
+        UserEntity userEntity = userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey);
 
-        return userEntity;
-    }
+        if(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey) != null) {
+            userEntity.setUsername(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getUsername());
+            userEntity.setReputation(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getReputation());
+            userEntity.setBirthdate(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getBirthdate());
+            userEntity.setPoints(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getPoints());
+            userEntity.setId(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getId());
+            userEntity.setApplicationEntity(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getApplicationEntity());
+            userRepository.deleteById(userEntity.getId());
 
-    private User toUser(UserEntity entity) {
-        User user = new User();
-        user.setId(JsonNullable.of(entity.getId()));
-        user.setName(entity.getName());
-        user.setPoints(entity.getPoints());
-        user.setReputation(JsonNullable.of(entity.getReputation()));
-        user.setBirthdate(entity.getBirthdate());
-        return user;
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

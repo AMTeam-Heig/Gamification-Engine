@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/Application'
     get:
       description: get the list of all app by apikey
-      operationId: getApplications
+      operationId: getApplication
       parameters:
         - $ref: '#/components/parameters/ApiKey'
       responses:
@@ -87,16 +87,16 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
-  /badges/{id}:
+  /badges/{name}:
     get:
-      description: get one badge, by id
+      description: get one badge, by name
       operationId: getBadge
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: name
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -146,16 +146,16 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
-  /events/{id}:
+  /events/{name}:
     get:
-      description: get one event, by id
+      description: get one event, by name
       operationId: getEvent
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: name
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -231,16 +231,16 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /users/{id}:
+  /users/{username}:
     get:
-      description: get one user, by id
+      description: get one user, by username
       operationId: getUser
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: username
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -253,17 +253,32 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
+    delete:
+      description: delete a user by name
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: user deleted successfully
+        '404':
+          $ref: "#/components/responses/NotFound"
 
-  /users-evolution/{id}:
+  /users-evolution/{username}:
     get:
       description: get the points evolution of one user, by id
       operationId: getUserEvolution
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: username
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -339,11 +354,6 @@ components:
     Badge:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
-        level:
-          type: string
         name:
           type: string
         description:
@@ -351,42 +361,27 @@ components:
         ObtainedOnDate:
           type: string
           format: date
-          nullable: true
     #EVENT
     Event:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
         name:
           type: string
-          nullable: true
-        type:
+        username:
           type: string
-          nullable: true
-        userId:
-          type: integer
-          nullable: true
         points:
           type: integer
-          nullable: true
-
     #USER
     User:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
-        name:
+        username:
           type: string
         birthdate:
           type: string
           format: date
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
 
@@ -394,8 +389,6 @@ components:
     UserEvolution:
       type: object
       properties:
-        id:
-          type: integer
         user:
           $ref: '#/components/schemas/User'
         points:
@@ -425,11 +418,9 @@ components:
           type: string
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
-          nullable: true
-        eventId:
-          type: integer
-        badgeId:
-          type: integer
+        eventName:
+          type: string
+        badgeName:
+          type: string

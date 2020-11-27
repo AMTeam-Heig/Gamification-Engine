@@ -17,14 +17,11 @@ public class EventEntity implements Serializable {
     private String name;
 
     @Column
-    private String type;
-
-    @Column
-    private int userId;
+    private String username;
 
     @Column
     private int points;
 
     @ManyToOne
-    private ApplicationEntity application;
+    private ApplicationEntity applicationEntity;
 }

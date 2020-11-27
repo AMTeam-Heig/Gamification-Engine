@@ -15,9 +15,6 @@ public class BadgeEntity implements Serializable {
     private int id;
 
     @Column
-    private String level;
-
-    @Column
     private String name;
 
     @Column
@@ -27,5 +24,5 @@ public class BadgeEntity implements Serializable {
     private LocalDate obtainedOnDate;
 
     @ManyToOne
-    private ApplicationEntity application;
+    private ApplicationEntity applicationEntity;
 }

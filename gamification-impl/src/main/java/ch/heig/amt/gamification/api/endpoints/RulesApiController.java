@@ -7,9 +7,11 @@ import ch.heig.amt.gamification.repositories.RuleRepository;
 import ch.heig.amt.gamification.api.RulesApi;
 import ch.heig.amt.gamification.api.model.Rule;
 import io.swagger.annotations.ApiParam;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
+@Controller
 public class RulesApiController implements RulesApi {
     @Autowired
     ApplicationRepository applicationRepository;
@@ -29,56 +32,49 @@ public class RulesApiController implements RulesApi {
 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Rule rule) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
-            RuleEntity newRuleEntity = toRuleEntity(rule);
-            newRuleEntity.setApp(app);
-            ruleRepository.save(newRuleEntity);
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
+            if(ruleRepository.findByNameAndApplicationEntity_ApiKey(rule.getName(),xApiKey) == null) {
+                RuleEntity ruleEntity = new RuleEntity();
+                ruleEntity.setName(rule.getName());
+                ruleEntity.setDefinition(rule.getDefinition());
+                ruleEntity.setPoints(rule.getPoints());
+                ruleEntity.setReputation(rule.getReputation());
+                ruleEntity.setEventName(rule.getEventName());
+                ruleEntity.setBadgeName(rule.getBadgeName());
+                ruleEntity.setApplicationEntity(applicationEntity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(newRuleEntity.getId()).toUri();
+                ruleRepository.save(ruleEntity);
 
-            return ResponseEntity.created(location).build();
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{name}")
+                        .buildAndExpand(ruleEntity.getName()).toUri();
+
+                return ResponseEntity.created(location).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    public ResponseEntity<Rule> getRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("id") int id) {
-        ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
-        if (app != null) {
-            String idStr = String.valueOf(id);
+    public ResponseEntity<Rule> getRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("name") String name) {
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        if (applicationEntity != null) {
 
             RuleEntity ruleEntity = ruleRepository
-                    .findByNameAndAppApiKey(idStr, xApiKey);
+                    .findByNameAndApplicationEntity_ApiKey(name, xApiKey);
             if(ruleEntity == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
-            return ResponseEntity.ok(toRule(ruleEntity));
+            Rule rule = new Rule();
+            rule.setName(ruleEntity.getName());
+            rule.setDefinition(ruleEntity.getDefinition());
+            rule.setPoints(ruleEntity.getPoints());
+            rule.setReputation(ruleEntity.getReputation());
+            rule.setEventName(ruleEntity.getEventName());
+            rule.setBadgeName(ruleEntity.getBadgeName());
+            return ResponseEntity.ok(rule);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    private RuleEntity toRuleEntity(Rule rule) {
-        RuleEntity entity = new RuleEntity();
-        entity.setName(rule.getName());
-        entity.setDefinition(rule.getDefinition());
-        //entity.setPoints(rule.getPoints()); //TODO
-        //entity.setReputation(rule.getReputation()); //TODO fix dis
-        entity.setEventId(rule.getEventId());
-        entity.setBadgeId(rule.getBadgeId());
-        return entity;
-    }
-
-    private Rule toRule(RuleEntity entity) {
-        Rule rule = new Rule();
-        rule.setName(entity.getName());
-        rule.setDefinition(entity.getDefinition());
-        //rule.setPoints(entity.getPoints());
-        //rule.setReputation(entity.getReputation());
-        rule.setEventId(entity.getEventId());
-        rule.setBadgeId(entity.getBadgeId());
-        return rule;
     }
 }

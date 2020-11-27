@@ -3,9 +3,7 @@ package ch.heig.amt.gamification.api.endpoints;
 import ch.heig.amt.gamification.api.TopNUsersApi;
 import ch.heig.amt.gamification.api.model.User;
 import ch.heig.amt.gamification.entities.UserEntity;
-import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +20,7 @@ public class TopNUsersApiController implements TopNUsersApi {
     @Override
     public ResponseEntity<List<User>> getTopUsers(String X_API_KEY, Integer nbr) {
         List<User> users = new ArrayList<>();
-        for (UserEntity userEntity : userRepository.findAllByAppApiKey(X_API_KEY)) {
+        for (UserEntity userEntity : userRepository.findAllByApplicationEntity_ApiKey(X_API_KEY)) {
             users.add(toUser(userEntity));
         }
         users.sort(Comparator.comparing(User::getPoints));
@@ -31,10 +29,9 @@ public class TopNUsersApiController implements TopNUsersApi {
 
     private User toUser(UserEntity entity) {
         User user = new User();
-        user.setId(JsonNullable.of(entity.getId()));
-        user.setName(entity.getName());
+        user.setUsername(entity.getUsername());
         user.setPoints(entity.getPoints());
-        user.setReputation(JsonNullable.of(entity.getReputation()));
+        user.setReputation(entity.getReputation());
         user.setBirthdate(entity.getBirthdate());
         return user;
     }

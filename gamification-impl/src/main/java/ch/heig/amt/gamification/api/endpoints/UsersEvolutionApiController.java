@@ -9,7 +9,6 @@ import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.UserEvolutionRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,20 +25,13 @@ public class UsersEvolutionApiController implements UsersEvolutionApi {
     UserRepository userRepository;
 
     @Override
-    public ResponseEntity<UserEvolution> getUserEvolution(String X_API_KEY, Integer id) {
-
-        UserEntity user = null;
-        for (UserEntity userEntity : userRepository.findAllByAppApiKey(X_API_KEY)) {
-            if (userEntity.getId() == id) {
-                user = userEntity;
-            }
-        }
+    public ResponseEntity<UserEvolution> getUserEvolution(String X_API_KEY, String username) {
+        UserEntity user = userRepository.findByUsernameAndApplicationEntity_ApiKey(username, X_API_KEY);
         return ResponseEntity.ok(toUserEvolution(userEvolutionRepository.findByUser(user)));
     }
 
     private UserEvolution toUserEvolution(UserEvolutionEntity userEvolutionEntity) {
         UserEvolution userEvolution = new UserEvolution();
-        userEvolution.setId(userEvolutionEntity.getId());
         userEvolution.setUser(toUser(userEvolutionEntity.getUser()));
         userEvolution.setPoints(toPointTimeEntityList(userEvolutionEntity.getPointTime()));
         return userEvolution;
@@ -63,10 +55,9 @@ public class UsersEvolutionApiController implements UsersEvolutionApi {
 
     private User toUser(UserEntity entity) {
         User user = new User();
-        user.setId(JsonNullable.of(entity.getId()));
-        user.setName(entity.getName());
+        user.setUsername(entity.getUsername());
         user.setPoints(entity.getPoints());
-        user.setReputation(JsonNullable.of(entity.getReputation()));
+        user.setReputation(entity.getReputation());
         user.setBirthdate(entity.getBirthdate());
         return user;
     }

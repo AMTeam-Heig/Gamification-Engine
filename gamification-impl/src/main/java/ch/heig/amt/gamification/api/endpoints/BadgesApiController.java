@@ -37,60 +37,56 @@ public class BadgesApiController implements BadgesApi {
     public ResponseEntity<Void> createBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Badge badge) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
-            BadgeEntity newBadgeEntity = toBadgeEntity(badge);
-            newBadgeEntity.setApplication(applicationEntity);
-            badgeRepository.save(newBadgeEntity);
+            if(badgeRepository.findByNameAndApplicationEntity_ApiKey(badge.getName(),xApiKey) == null)
+            {
+                BadgeEntity entity = new BadgeEntity();
+                entity.setName(badge.getName());
+                entity.setDescription(badge.getDescription());
+                entity.setObtainedOnDate(badge.getObtainedOnDate());
+                entity.setApplicationEntity(applicationEntity);
+                badgeRepository.save(entity);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(newBadgeEntity.getId()).toUri();
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{name}")
+                        .buildAndExpand(entity.getName()).toUri();
 
-            return ResponseEntity.created(location).build();
+                return ResponseEntity.created(location).build();
+            }
+
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     public ResponseEntity<List<Badge>> getBadges(@RequestHeader(value = "X-API-KEY") String xApiKey) {
         List<Badge> badges = new ArrayList<>();
-        for (BadgeEntity badgeEntity : badgeRepository.findAllByApplication_ApiKey(xApiKey)) {
-            badges.add(toBadge(badgeEntity));
+        for (BadgeEntity badgeEntity : badgeRepository.findAllByApplicationEntity_ApiKey(xApiKey)) {
+            Badge badge = new Badge();
+            badge.setName(badgeEntity.getName());
+            badge.setDescription(badgeEntity.getDescription());
+            badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());
+            badges.add(badge);
         }
         return ResponseEntity.ok(badges);
     }
 
-    public ResponseEntity<Badge> getBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("id") int id) {
+    public ResponseEntity<Badge> getBadge(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("name") String name) {
         ApplicationEntity app = applicationRepository.findByApiKey(xApiKey);
         if (app != null) {
-            String idStr = String.valueOf(id);
 
-            BadgeEntity existingBadgeEntity = badgeRepository
-                    .findByIdAndApplication_ApiKey(idStr, xApiKey);
-            if(existingBadgeEntity == null){
+            BadgeEntity badgeEntity = badgeRepository
+                    .findByNameAndApplicationEntity_ApiKey(name, xApiKey);
+            if(badgeEntity == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
-            return ResponseEntity.ok(toBadge(existingBadgeEntity));
+
+            Badge badge = new Badge();
+            badge.setName(badgeEntity.getName());
+            badge.setDescription(badgeEntity.getDescription());
+            badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());
+
+            return ResponseEntity.ok(badge);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    private BadgeEntity toBadgeEntity(Badge badge) {
-        BadgeEntity entity = new BadgeEntity();
-        entity.setId(badge.getId().isPresent() ? badge.getId().get() : 2); // TODO create new id
-        entity.setLevel(badge.getLevel());
-        entity.setName(badge.getName());
-        entity.setDescription(badge.getDescription());
-        entity.setObtainedOnDate(badge.getObtainedOnDate().isPresent() ? badge.getObtainedOnDate().get() : LocalDate.now());
-        return entity;
-    }
-
-    private Badge toBadge(BadgeEntity entity) {
-        Badge badge = new Badge();
-        badge.setId(JsonNullable.of(entity.getId()));
-        badge.setLevel(entity.getLevel());
-        badge.setName(entity.getName());
-        badge.setDescription(entity.getDescription());
-        badge.setObtainedOnDate(JsonNullable.of(entity.getObtainedOnDate()));
-        return badge;
     }
 }
