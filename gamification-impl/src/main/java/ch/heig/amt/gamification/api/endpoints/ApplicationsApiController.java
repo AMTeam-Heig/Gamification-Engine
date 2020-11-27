@@ -27,7 +27,14 @@ public class ApplicationsApiController implements ApplicationsApi {
 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Application> createApplication(@ApiParam(value = ""  )  @Valid @RequestBody(required = false) NewApplication newApplication)  {
-        ApplicationEntity applicationEntity = new ApplicationEntity();
+
+
+        ApplicationEntity applicationEntity = applicationRepository.findByName(newApplication.getName());
+        if(applicationEntity != null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        applicationEntity = new ApplicationEntity();
         applicationEntity.setApiKey(ApplicationEntity.generateApiKey());
         applicationEntity.setName(newApplication.getName());
         applicationRepository.save(applicationEntity);
@@ -37,6 +44,7 @@ public class ApplicationsApiController implements ApplicationsApi {
                 .buildAndExpand(applicationEntity.getName()).toUri();
 
         return ResponseEntity.created(location).build();
+
     }
 
     @Override
