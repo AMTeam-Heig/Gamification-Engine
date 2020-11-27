@@ -44,10 +44,10 @@ public class UsersApiController implements UsersApi {
                 UserEntity userEntity = new UserEntity();
                 userEntity.setApplicationEntity(applicationEntity);
                 userEntity.setUsername(user.getUsername());
+                userEntity.setRole(user.getRole());
                 userEntity.setPoints(user.getPoints());
                 userEntity.setBirthdate(user.getBirthdate());
                 userEntity.setReputation(user.getReputation());
-
 
             /*List<BadgeEntity> badgeEntities = new LinkedList<>();
             for(Badge b : user.getBadges()){
@@ -73,12 +73,12 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-
     public ResponseEntity<List<User>> getUsers(@RequestHeader(value = "X-API-KEY") String xApiKey) {
         List<User> users = new ArrayList<>();
         for (UserEntity userEntity : userRepository.findAllByApplicationEntity_ApiKey(xApiKey)) {
             User user = new User();
             user.setUsername(userEntity.getUsername());
+            user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
             user.setReputation(userEntity.getReputation());
             user.setBirthdate(userEntity.getBirthdate());
@@ -100,6 +100,7 @@ public class UsersApiController implements UsersApi {
 
             User user = new User();
             user.setUsername(userEntity.getUsername());
+            user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
             user.setReputation(userEntity.getReputation());
             user.setBirthdate(userEntity.getBirthdate());
@@ -117,6 +118,7 @@ public class UsersApiController implements UsersApi {
 
         if(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey) != null) {
             userEntity.setUsername(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getUsername());
+            userEntity.setRole(userRepository.findByUsernameAndApplicationEntity_ApiKey(username,xApiKey).getRole());
             userEntity.setReputation(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getReputation());
             userEntity.setBirthdate(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getBirthdate());
             userEntity.setPoints(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getPoints());

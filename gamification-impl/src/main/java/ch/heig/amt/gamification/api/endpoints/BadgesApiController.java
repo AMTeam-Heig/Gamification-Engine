@@ -39,16 +39,16 @@ public class BadgesApiController implements BadgesApi {
         if (applicationEntity != null) {
             if(badgeRepository.findByNameAndApplicationEntity_ApiKey(badge.getName(),xApiKey) == null)
             {
-                BadgeEntity entity = new BadgeEntity();
-                entity.setName(badge.getName());
-                entity.setDescription(badge.getDescription());
-                entity.setObtainedOnDate(badge.getObtainedOnDate());
-                entity.setApplicationEntity(applicationEntity);
-                badgeRepository.save(entity);
+                BadgeEntity badgeEntity = new BadgeEntity();
+                badgeEntity.setName(badge.getName());
+                badgeEntity.setDescription(badge.getDescription());
+                badgeEntity.setObtainedOnDate(badge.getObtainedOnDate());
+                badgeEntity.setApplicationEntity(applicationEntity);
+                badgeRepository.save(badgeEntity);
 
                 URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest().path("/{name}")
-                        .buildAndExpand(entity.getName()).toUri();
+                        .buildAndExpand(badgeEntity.getName()).toUri();
 
                 return ResponseEntity.created(location).build();
             }

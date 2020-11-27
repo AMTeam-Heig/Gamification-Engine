@@ -12,9 +12,9 @@ info:
 security:
   #  - bearerAuth: []
   - apiKeyAuth: []
-    
+
 paths:
-  /application:
+  /applications:
     post:
       description: create a new application
       operationId: createApplication
@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/Application'
     get:
       description: get the list of all app by apikey
-      operationId: getApplication
+      operationId: getApplications
       parameters:
         - $ref: '#/components/parameters/ApiKey'
       responses:
@@ -47,6 +47,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Application'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /applications/{name}:
+    get:
+      description: get one application, by name
+      operationId: getApplication
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Application'
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -336,6 +358,8 @@ components:
           type: string
         points:
           type: integer
+        role:
+          type: integer #ex : admin : 2, modo : 1, user : 0
     # RULE
     Rule:
       type: object
