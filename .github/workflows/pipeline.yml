@@ -5,9 +5,9 @@ name:  Publishing the Docker image
 on:
   # triggered on push and pull_request on master branch
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
  

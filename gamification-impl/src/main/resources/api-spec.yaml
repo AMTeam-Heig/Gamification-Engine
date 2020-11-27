@@ -12,7 +12,7 @@ info:
 security:
   #  - bearerAuth: []
   - apiKeyAuth: []
-    
+
 paths:
   /application:
     post:
@@ -169,6 +169,31 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
+  /topN-users/{nbr}:
+    get:
+      description: get the list of the top N users of the app
+      operationId: getTopUsers
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: nbr
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
   /users:
     post:
       description: create a user
@@ -241,6 +266,29 @@ paths:
       responses:
         '200':
           description: user deleted successfully
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+  /users-evolution/{username}:
+    get:
+      description: get the points evolution of one user, by id
+      operationId: getUserEvolution
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UserEvolution'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
   /rules:
@@ -336,6 +384,30 @@ components:
           type: string
         points:
           type: integer
+
+    #USER EVOLUTION
+    UserEvolution:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/PointTime'
+    #POINTS
+    PointTime:
+      type: object
+      properties:
+        id:
+          type: integer
+        points:
+          type: integer
+        isAdded:
+          type: boolean
+        date:
+          type: string
+          format: date
     # RULE
     Rule:
       type: object

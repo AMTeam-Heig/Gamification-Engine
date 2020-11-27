@@ -4,7 +4,9 @@ import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
+import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
+import ch.heig.amt.gamification.repositories.UserEvolutionRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
 import ch.heig.amt.gamification.api.UsersApi;
 import ch.heig.amt.gamification.api.model.User;
@@ -34,6 +36,9 @@ public class UsersApiController implements UsersApi {
     UserRepository userRepository;
 
     @Autowired
+    UserEvolutionRepository userEvolutionRepository;
+
+    @Autowired
     ApplicationRepository applicationRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -61,7 +66,10 @@ public class UsersApiController implements UsersApi {
 
             userEntity.setBadgeEntity(badgeEntities);*/
 
+                UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
+                userEvolutionEntity.setUser(userEntity);
                 userRepository.save(userEntity);
+                userEvolutionRepository.save(userEvolutionEntity);
 
                 URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest().path("/{username}")
