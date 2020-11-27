@@ -61,6 +61,25 @@ public class BasicSteps {
             processApiException(e);
         }
     }
+    @Then("I receive a {int} status code")
+    public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
+        assertEquals(expectedStatusCode, lastStatusCode);
+    }
+
+    @Then("I receive a payload that has an api key")
+    public void i_receive_a_payload_that_has_an_api_key() {
+       // Application a = (Application)lastApiResponse.getData();
+    }
+
+    @When("^I send a GET to the /applications endpoint$")
+    public void i_send_a_get_to_the_applications_endpoint() {
+      try {
+          lastApiResponse = api.getApplicationsWithHttpInfo();
+          processApiResponse(lastApiResponse);
+      } catch (ApiException e) {
+          processApiException(e);
+      }
+    }
 
     protected void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
@@ -113,15 +132,7 @@ public class BasicSteps {
     }
 
 
-    @When("^I POST the application payload to the /application endpoint$")
-    public void i_POST_the_application_payload_to_the_application_endpoint() throws Throwable {
-        try {
-            lastApiResponse = api.newApplicationWithHttpInfo(application);
-            processApiResponse(lastApiResponse);
-        } catch (ApiException e) {
-            processApiException(e);
-        }
-    }
+
 
     @When("^I send a GET to the /application endpoint$")
     public void iSendAGETToTheApplicationEndpoint() {
