@@ -12,8 +12,9 @@ info:
 security:
   #  - bearerAuth: []
   - apiKeyAuth: []
+
 paths:
-  /application:
+  /applications:
     post:
       description: create a new application
       operationId: createApplication
@@ -35,8 +36,6 @@ paths:
     get:
       description: get the list of all app by apikey
       operationId: getApplications
-      parameters:
-        - $ref: '#/components/parameters/ApiKey'
       responses:
         '200':
           description: success
@@ -46,6 +45,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Application'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /applications/{name}:
+    get:
+      description: get one application, by name
+      operationId: getApplication
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Application'
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -86,16 +106,16 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
-  /badges/{id}:
+  /badges/{name}:
     get:
-      description: get one badge, by id
+      description: get one badge, by name
       operationId: getBadge
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: name
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -109,6 +129,88 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
+  /events:
+    post:
+      description: create an event
+      operationId: createEvent
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Event created with success
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+    get:
+      description: get the list of all events of the app
+      operationId: getEvents
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /events/{name}:
+    get:
+      description: get one event, by name
+      operationId: getEvent
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /topN-users/{nbr}:
+    get:
+      description: get the list of the top N users of the app
+      operationId: getTopUsers
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: nbr
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
   /users:
     post:
       description: create a user
@@ -146,16 +248,16 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /users/{id}:
+  /users/{username}:
     get:
-      description: get one user, by id
+      description: get one user, by username
       operationId: getUser
       parameters:
         - $ref: '#/components/parameters/ApiKey'
         - in: path
-          name: id
+          name: username
           schema:
-            type: integer
+            type: string
           required: true
       responses:
         '200':
@@ -168,6 +270,44 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         '404':
           $ref: "#/components/responses/NotFound"
+    delete:
+      description: delete a user by name
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: user deleted successfully
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /users-evolution/{username}:
+    get:
+      description: get the points evolution of one user, by id
+      operationId: getUserEvolution
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UserEvolution'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
   /rules:
     post:
       description: create a rule
@@ -231,11 +371,6 @@ components:
     Badge:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
-        level:
-          type: string
         name:
           type: string
         description:
@@ -243,24 +378,56 @@ components:
         ObtainedOnDate:
           type: string
           format: date
-          nullable: true
+    #EVENT
+    Event:
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        points:
+          type: integer
     #USER
     User:
       type: object
       properties:
-        id:
-          type: integer
-          nullable: true
-        name:
+        username:
           type: string
         birthdate:
           type: string
           format: date
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
+        role:
+          type: integer #ex : admin : 2, modo : 1, user : 0
+
+    #USER EVOLUTION
+    UserEvolution:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/PointTime'
+    #POINTS
+    PointTime:
+      type: object
+      properties:
+        id:
+          type: integer
+        points:
+          type: integer
+        isAdded:
+          type: boolean
+        date:
+          type: string
+          format: date
+
     # RULE
     Rule:
       type: object
@@ -271,11 +438,9 @@ components:
           type: string
         reputation:
           type: string
-          nullable: true
         points:
           type: integer
-          nullable: true
-        eventId:
-          type: integer
-        badgeId:
-          type: integer
+        eventName:
+          type: string
+        badgeName:
+          type: string
