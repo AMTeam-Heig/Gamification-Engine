@@ -1,13 +1,13 @@
 package ch.heig.amt.gamification.api.spec.steps;
-    /*
+
 import ch.heig.amt.gamification.api.*;
 
 import ch.heig.amt.gamification.api.spec.helpers.Environment;
-import io.avalia.gamification.ApiException;
-import io.avalia.gamification.ApiResponse;
-import io.avalia.gamification.api.dto.Application;
-import io.avalia.gamification.api.dto.Badge;
-import io.avalia.gamification.api.dto.InlineObject;
+import ch.heig.amt.gamification.ApiException;
+import ch.heig.amt.gamification.ApiResponse;
+import ch.heig.amt.gamification.api.dto.Application;
+import ch.heig.amt.gamification.api.dto.Badge;
+import ch.heig.amt.gamification.api.dto.InlineObject;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -17,10 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
-*/
 
 public class BasicSteps {
-    /*
 
     private Environment environment;
     private DefaultApi api;
@@ -45,7 +43,42 @@ public class BasicSteps {
         this.api = environment.getApi();
     }
 
+    @Given("there is a Gamification server")
+    public void there_is_a_Gamification_server() throws Throwable {
+        assertNotNull(api);
+    }
 
+    @Given("I have an application payload")
+    public void i_have_an_application_payload() {
+        application = new ch.heig.amt.gamification.api.dto.InlineObject().name("New Application");
+    }
+    @When("^I POST the application payload to the /applications endpoint$")
+    public void i_POST_the_application_payload_to_the_application_endpoint() throws Throwable {
+        try {
+            lastApiResponse = api.createApplicationWithHttpInfo(application);
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
+
+    protected void processApiResponse(ApiResponse apiResponse) {
+        lastApiResponse = apiResponse;
+        lastApiCallThrewException = false;
+        lastApiException = null;
+        lastReceivedApiKey = (String) apiResponse.getHeaders().get("apiKey");
+        lastStatusCode = lastApiResponse.getStatusCode();
+        List<String> locationHeaderValues = (List<String>)lastApiResponse.getHeaders().get("Location");
+        lastReceivedLocationHeader = locationHeaderValues != null ? locationHeaderValues.get(0) : null;
+    }
+
+    protected void processApiException(ApiException apiException) {
+        lastApiCallThrewException = true;
+        lastApiResponse = null;
+        lastApiException = apiException;
+        lastStatusCode = lastApiException.getCode();
+    }
+/*
     @Given("I have a badge payload")
     public void i_have_a_badge_payload() throws Throwable {
         badge = new ch.heig.amt.gamification.api.dto.Badge()
@@ -79,10 +112,6 @@ public class BasicSteps {
         assertEquals(badge, lastReceivedBadge);
     }
 
-    @Given("I have an application payload")
-    public void i_have_an_application_payload() {
-        application = new ch.heig.amt.gamification.api.dto.InlineObject().name("New Application");
-    }
 
     @When("^I POST the application payload to the /application endpoint$")
     public void i_POST_the_application_payload_to_the_application_endpoint() throws Throwable {
@@ -119,10 +148,7 @@ public class BasicSteps {
         assertEquals(application.getName(), lastReceivedApplication.getName());
     }
 
-    @Given("there is a Gamification server")
-    public void there_is_a_Gamification_server() throws Throwable {
-        assertNotNull(api);
-    }
+
 
     @Then("I receive a {int} status code")
     public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
@@ -161,22 +187,6 @@ public class BasicSteps {
         }
     }
 
-    protected void processApiResponse(ApiResponse apiResponse) {
-        lastApiResponse = apiResponse;
-        lastApiCallThrewException = false;
-        lastApiException = null;
-        lastReceivedApiKey = (String) apiResponse.getHeaders().get("apiKey");
-        lastStatusCode = lastApiResponse.getStatusCode();
-        List<String> locationHeaderValues = (List<String>)lastApiResponse.getHeaders().get("Location");
-        lastReceivedLocationHeader = locationHeaderValues != null ? locationHeaderValues.get(0) : null;
-    }
-
-    protected void processApiException(ApiException apiException) {
-        lastApiCallThrewException = true;
-        lastApiResponse = null;
-        lastApiException = apiException;
-        lastStatusCode = lastApiException.getCode();
-    }
      */
 
 }
