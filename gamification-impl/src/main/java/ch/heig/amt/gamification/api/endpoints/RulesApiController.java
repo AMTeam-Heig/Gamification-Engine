@@ -76,7 +76,7 @@ public class RulesApiController implements RulesApi {
         return ResponseEntity.ok(rules);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @Override
     public ResponseEntity<Rule> getRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "", required = true) @PathVariable("name") String name) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
