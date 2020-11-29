@@ -1,5 +1,6 @@
 package ch.heig.amt.gamification.api.endpoints;
 
+import ch.heig.amt.gamification.api.model.Application;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.RuleEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
@@ -21,6 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class RulesApiController implements RulesApi {
@@ -31,10 +34,10 @@ public class RulesApiController implements RulesApi {
     RuleRepository ruleRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = ""  ) @Valid @RequestBody(required=true) Rule rule) {
+    public ResponseEntity<Void> createRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "") @Valid @RequestBody(required = true) Rule rule) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
-            if(ruleRepository.findByNameAndApplicationEntity_ApiKey(rule.getName(),xApiKey) == null) {
+            if (ruleRepository.findByNameAndApplicationEntity_ApiKey(rule.getName(), xApiKey) == null) {
                 RuleEntity ruleEntity = new RuleEntity();
                 ruleEntity.setName(rule.getName());
                 ruleEntity.setDefinition(rule.getDefinition());
@@ -56,13 +59,31 @@ public class RulesApiController implements RulesApi {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    public ResponseEntity<Rule> getRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "",required=true) @PathVariable("name") String name) {
+    @Override
+    public ResponseEntity<List<Rule>> getRules(@RequestHeader(value = "X-API-KEY") String xApiKey) {
+        List<Rule> rules = new LinkedList<>();
+        for (RuleEntity ruleEntity : ruleRepository.findAll()) {
+            Rule rule = new Rule();
+            rule.setBadgeName(ruleEntity.getBadgeName());
+            rule.setDefinition(ruleEntity.getDefinition());
+            rule.setEventName(ruleEntity.getEventName());
+            rule.setName(ruleEntity.getName());
+            rule.setPoints(ruleEntity.getPoints());
+            rule.setReputation(ruleEntity.getReputation());
+
+            rules.add(rule);
+        }
+        return ResponseEntity.ok(rules);
+    }
+
+    @Override
+    public ResponseEntity<Rule> getRule(@RequestHeader(value = "X-API-KEY") String xApiKey, @ApiParam(value = "", required = true) @PathVariable("name") String name) {
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
         if (applicationEntity != null) {
 
             RuleEntity ruleEntity = ruleRepository
                     .findByNameAndApplicationEntity_ApiKey(name, xApiKey);
-            if(ruleEntity == null){
+            if (ruleEntity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             Rule rule = new Rule();
