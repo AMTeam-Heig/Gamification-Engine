@@ -1,6 +1,9 @@
 .DS_Store
 .idea/
 
+gamification-impl/update_docker.sh
+gamification-impl/docker/artifact/gamification-impl.jar
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
