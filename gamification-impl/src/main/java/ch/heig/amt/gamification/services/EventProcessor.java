@@ -1,15 +1,14 @@
 package ch.heig.amt.gamification.services;
 
-import ch.heig.amt.gamification.api.model.User;
-import ch.heig.amt.gamification.entities.*;
+import ch.heig.amt.gamification.entities.BadgeEntity;
+import ch.heig.amt.gamification.entities.EventEntity;
+import ch.heig.amt.gamification.entities.RuleEntity;
+import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.repositories.BadgeRepository;
 import ch.heig.amt.gamification.repositories.RuleRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class EventProcessor {

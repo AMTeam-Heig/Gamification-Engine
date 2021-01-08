@@ -1,9 +1,9 @@
 package ch.heig.amt.gamification.api.endpoints;
 
-import ch.heig.amt.gamification.api.model.NewApplication;
-import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.api.ApplicationsApi;
 import ch.heig.amt.gamification.api.model.Application;
+import ch.heig.amt.gamification.api.model.NewApplication;
+import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;

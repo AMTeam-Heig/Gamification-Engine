@@ -1,13 +1,12 @@
 package ch.heig.amt.gamification.api.endpoints;
 
+import ch.heig.amt.gamification.api.BadgesApi;
+import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.BadgeRepository;
-import ch.heig.amt.gamification.api.BadgesApi;
-import ch.heig.amt.gamification.api.model.Badge;
 import io.swagger.annotations.ApiParam;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

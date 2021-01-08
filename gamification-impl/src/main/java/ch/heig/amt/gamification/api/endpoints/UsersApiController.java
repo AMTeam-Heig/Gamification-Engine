@@ -1,18 +1,14 @@
 package ch.heig.amt.gamification.api.endpoints;
 
-import ch.heig.amt.gamification.api.model.Badge;
+import ch.heig.amt.gamification.api.UsersApi;
+import ch.heig.amt.gamification.api.model.User;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
-import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.UserEvolutionRepository;
 import ch.heig.amt.gamification.repositories.UserRepository;
-import ch.heig.amt.gamification.api.UsersApi;
-import ch.heig.amt.gamification.api.model.User;
 import io.swagger.annotations.ApiParam;
-import org.h2.security.auth.AuthenticationInfo;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Controller

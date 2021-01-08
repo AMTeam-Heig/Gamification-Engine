@@ -1,14 +1,12 @@
 package ch.heig.amt.gamification.api.endpoints;
 
-import ch.heig.amt.gamification.api.model.Application;
+import ch.heig.amt.gamification.api.RulesApi;
+import ch.heig.amt.gamification.api.model.Rule;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
 import ch.heig.amt.gamification.entities.RuleEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
 import ch.heig.amt.gamification.repositories.RuleRepository;
-import ch.heig.amt.gamification.api.RulesApi;
-import ch.heig.amt.gamification.api.model.Rule;
 import io.swagger.annotations.ApiParam;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
