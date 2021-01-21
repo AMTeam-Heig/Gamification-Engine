@@ -10,6 +10,8 @@ import ch.heig.amt.gamification.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EventProcessor {
     @Autowired
@@ -30,6 +32,7 @@ public class EventProcessor {
         UserEntity userEntity = findUser(userEntities, event.getUsername());
 
         if(userEntity != null){
+            List<BadgeEntity> badgeEntityList;
             for(RuleEntity rule : ruleEntities){
                 //We're looking for rules triggered by the event
                 if(rule.getEventName().equals(event.getName())){
@@ -38,8 +41,19 @@ public class EventProcessor {
                     userEntity.setPoints(userEntity.getPoints() + event.getPoints());
                     //Distributing badges
                     //userEntity.setBadges()
-                    //Distributing reputation
 
+                    //Distributing reputation
+                }
+                if(rule.getBadgeName() != null){
+                    for(BadgeEntity badge : badgeEntities) {
+                        if (rule.getBadgeName().equals(badge.getName())){
+                            if(!userEntity.getBadges().contains(badge)){
+                                badgeEntityList = userEntity.getBadges();
+                                badgeEntityList.add(badge);
+                                userEntity.setBadges(badgeEntityList);
+                            }
+                        }
+                    }
                 }
             }
             userRepository.save(userEntity);

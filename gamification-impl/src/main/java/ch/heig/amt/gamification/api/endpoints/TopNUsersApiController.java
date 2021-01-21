@@ -1,7 +1,9 @@
 package ch.heig.amt.gamification.api.endpoints;
 
 import ch.heig.amt.gamification.api.TopNUsersApi;
+import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.api.model.User;
+import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -31,9 +34,20 @@ public class TopNUsersApiController implements TopNUsersApi {
         User user = new User();
         user.setUsername(entity.getUsername());
         user.setPoints(entity.getPoints());
-        user.setReputation(entity.getReputation());
         user.setBirthdate(entity.getBirthdate());
+        user.setBadges(BadgeEntityToBadgeList(entity));
         return user;
+    }
+
+    private List<Badge> BadgeEntityToBadgeList(UserEntity userEntity){
+        List<Badge> badges = new LinkedList<>();
+        for(BadgeEntity b : userEntity.getBadges()){
+            Badge badge = new Badge();
+            badge.setDescription(b.getDescription());
+            badge.setName(b.getName());
+            badges.add(badge);
+        }
+        return badges;
     }
 
 }

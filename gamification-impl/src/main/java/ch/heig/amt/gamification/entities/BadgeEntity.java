@@ -20,9 +20,6 @@ public class BadgeEntity implements Serializable {
     @Column
     private String description;
 
-    @Column
-    private LocalDate obtainedOnDate;
-
     @ManyToOne
     private ApplicationEntity applicationEntity;
 }

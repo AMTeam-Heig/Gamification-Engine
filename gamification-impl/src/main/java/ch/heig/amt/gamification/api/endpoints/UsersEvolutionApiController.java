@@ -57,7 +57,6 @@ public class UsersEvolutionApiController implements UsersEvolutionApi {
         User user = new User();
         user.setUsername(entity.getUsername());
         user.setPoints(entity.getPoints());
-        user.setReputation(entity.getReputation());
         user.setBirthdate(entity.getBirthdate());
         return user;
     }

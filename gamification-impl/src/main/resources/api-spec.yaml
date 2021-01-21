@@ -420,9 +420,6 @@ components:
           type: string
         description:
           type: string
-        ObtainedOnDate:
-          type: string
-          format: date
     #EVENT
     Event:
       type: object
@@ -442,8 +439,10 @@ components:
         birthdate:
           type: string
           format: date
-        reputation:
-          type: string
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Badge'
         points:
           type: integer
         role:
