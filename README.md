@@ -2,19 +2,18 @@
 
 # Gamification
 
-To run the program use the following command:
-```bash
-docker run -p 8080:8080 ghcr.io/amteam-heig/gamification-engine/spring/gamification:latest
-```
- Or 
+To run the program use the following steps:
  
 After cloning the repository you can use maven to build and run the REST API implementation from the command line. After invoking the following maven goal, the Spring Boot server will be up and running, listening for connections on port 8080.
-
 ```
 cd gamification-impl/
 mvn spring-boot:run
 ```
-
+or 
+```bash
+docker run -p 8080:8080 ghcr.io/amteam-heig/gamification-engine/spring/gamification:latest
+```
+Note that this version is used mainly to integrate the gamification engine with the web application. 
 You can then access:
 
 * the [API documentation](http://localhost:8080/swagger-ui.html), generated from annotations in the code
@@ -22,12 +21,17 @@ You can then access:
 
 
 # Test the gamification  microservice by running the executable specification
-
-You can use the Cucumber project to validate the API implementation. Do this when the server is running.
+### Cucumber :
+A dedicated branche of Cumcumber tests was created to avoid all congestion with project 3 :
+Kindly use this branche : 
+[Cumcumber tests](https://github.com/AMTeam-Heig/Gamification-Engine/tree/Cucumber-Tests)
 
 ```
 cd gamification-specs/
 mvn clean test
 ```
 You will see the test results in the console, but you can also open the file located in `./target/cucumber`
-
+We tested all possible behaviour of an application creation and retrieve ,also some tests for badges .
+### Jmeter:
+The gamification engine was tested by this load test tools .We tested a heavy load with  multiple connections from multiple applications and users .
+the flux of events was tested also .
