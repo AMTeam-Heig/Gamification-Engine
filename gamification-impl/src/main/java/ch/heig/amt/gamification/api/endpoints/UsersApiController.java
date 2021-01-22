@@ -50,7 +50,7 @@ public class UsersApiController implements UsersApi {
                 userEntity.setRole(user.getRole());
                 userEntity.setPoints(user.getPoints());
                 userEntity.setBirthdate(user.getBirthdate());
-                userEntity.setBadges(BadgesToBadgeEntityList(user, xApiKey));
+                userEntity.setBadges(badgesToBadgeEntityList(user, xApiKey));
 
                 UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
                 userEvolutionEntity.setUser(userEntity);
@@ -75,7 +75,7 @@ public class UsersApiController implements UsersApi {
             user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
             user.setBirthdate(userEntity.getBirthdate());
-            user.setBadges(BadgeEntityToBadgeList(userEntity));
+            user.setBadges(badgeEntityToBadgeList(userEntity));
             users.add(user);
         }
         return ResponseEntity.ok(users);
@@ -97,7 +97,7 @@ public class UsersApiController implements UsersApi {
             user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
             user.setBirthdate(userEntity.getBirthdate());
-            user.setBadges(BadgeEntityToBadgeList(userEntity));
+            user.setBadges(badgeEntityToBadgeList(userEntity));
 
             return ResponseEntity.ok(user);
         }
@@ -129,7 +129,7 @@ public class UsersApiController implements UsersApi {
     }
 
 
-    private List<BadgeEntity> BadgesToBadgeEntityList(User user, String xApiKey){
+    private List<BadgeEntity> badgesToBadgeEntityList(User user, String xApiKey){
         ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
 
         List<BadgeEntity> badgeEntities = new LinkedList<>();
@@ -143,7 +143,7 @@ public class UsersApiController implements UsersApi {
         return badgeEntities;
     }
 
-    private List<Badge> BadgeEntityToBadgeList(UserEntity userEntity){
+    private List<Badge> badgeEntityToBadgeList(UserEntity userEntity){
         List<Badge> badges = new LinkedList<>();
         for(BadgeEntity b : userEntity.getBadges()){
             Badge badge = new Badge();
@@ -152,6 +152,36 @@ public class UsersApiController implements UsersApi {
             badges.add(badge);
         }
         return badges;
+    }
+
+    private List<UserEntity> userToUserEntityList(List<User> userList, String xApiKey){
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+
+        List<UserEntity> users = new LinkedList<>();
+        for(User u : userList){
+            UserEntity userEntity = new UserEntity();
+            userEntity.setApplicationEntity(applicationEntity);
+            userEntity.setBadges(badgeToBadgeEntityList(u, xApiKey));
+            userEntity.setUsername(u.getUsername());
+            userEntity.setBirthdate(u.getBirthdate());
+            userEntity.setPoints(u.getPoints());
+            userEntity.setRole(u.getRole());
+            users.add(userEntity);
+        }
+        return users;
+    }
+
+    private List<BadgeEntity> badgeToBadgeEntityList(User user, String xApiKey){
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+        List<BadgeEntity> badgeEntities = new LinkedList<>();
+        for(Badge b : user.getBadges()){
+            BadgeEntity badgeEntity = new BadgeEntity();
+            badgeEntity.setApplicationEntity(applicationEntity);
+            badgeEntity.setDescription(b.getDescription());
+            badgeEntity.setName(b.getName());
+            badgeEntities.add(badgeEntity);
+        }
+        return badgeEntities;
     }
 
 }

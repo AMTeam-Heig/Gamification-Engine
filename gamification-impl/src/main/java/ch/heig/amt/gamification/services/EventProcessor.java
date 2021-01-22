@@ -41,20 +41,21 @@ public class EventProcessor {
                     userEntity.setPoints(userEntity.getPoints() + event.getPoints());
                     //Distributing badges
                     //userEntity.setBadges()
-
-                    //Distributing reputation
-                }
-                if(rule.getBadgeName() != null){
-                    for(BadgeEntity badge : badgeEntities) {
-                        if (rule.getBadgeName().equals(badge.getName())){
-                            if(!userEntity.getBadges().contains(badge)){
-                                badgeEntityList = userEntity.getBadges();
-                                badgeEntityList.add(badge);
-                                userEntity.setBadges(badgeEntityList);
+                    if(rule.getBadgeName() != null){
+                        for(BadgeEntity badge : badgeEntities) {
+                            if (rule.getBadgeName().equals(badge.getName())){
+                                if(!userEntity.getBadges().contains(badge)){
+                                    badgeEntityList = userEntity.getBadges();
+                                    badgeEntityList.add(badge);
+                                    userEntity.setBadges(badgeEntityList);
+                                    userEntity.setPoints(userEntity.getPoints() + rule.getPoints());
+                                }
                             }
                         }
                     }
+                    //Distributing reputation
                 }
+
             }
             userRepository.save(userEntity);
         }
