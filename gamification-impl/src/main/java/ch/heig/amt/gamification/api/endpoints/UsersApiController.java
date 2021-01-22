@@ -1,8 +1,10 @@
 package ch.heig.amt.gamification.api.endpoints;
 
 import ch.heig.amt.gamification.api.UsersApi;
+import ch.heig.amt.gamification.api.model.Badge;
 import ch.heig.amt.gamification.api.model.User;
 import ch.heig.amt.gamification.entities.ApplicationEntity;
+import ch.heig.amt.gamification.entities.BadgeEntity;
 import ch.heig.amt.gamification.entities.UserEntity;
 import ch.heig.amt.gamification.entities.UserEvolutionEntity;
 import ch.heig.amt.gamification.repositories.ApplicationRepository;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -47,19 +50,7 @@ public class UsersApiController implements UsersApi {
                 userEntity.setRole(user.getRole());
                 userEntity.setPoints(user.getPoints());
                 userEntity.setBirthdate(user.getBirthdate());
-                userEntity.setReputation(user.getReputation());
-
-            /*List<BadgeEntity> badgeEntities = new LinkedList<>();
-            for(Badge b : user.getBadges()){
-                BadgeEntity badgeEntity = new BadgeEntity();
-                badgeEntity.setApplicationEntity(applicationEntity);
-                badgeEntity.setDescription(b.getDescription());
-                badgeEntity.setName(b.getName());
-                badgeEntity.setObtainedOnDate(b.getObtainedOnDate());
-                badgeEntities.add(badgeEntity);
-            }
-
-            userEntity.setBadgeEntity(badgeEntities);*/
+                userEntity.setBadges(BadgesToBadgeEntityList(user, xApiKey));
 
                 UserEvolutionEntity userEvolutionEntity = new UserEvolutionEntity();
                 userEvolutionEntity.setUser(userEntity);
@@ -83,8 +74,8 @@ public class UsersApiController implements UsersApi {
             user.setUsername(userEntity.getUsername());
             user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
-            user.setReputation(userEntity.getReputation());
             user.setBirthdate(userEntity.getBirthdate());
+            user.setBadges(BadgeEntityToBadgeList(userEntity));
             users.add(user);
         }
         return ResponseEntity.ok(users);
@@ -105,8 +96,8 @@ public class UsersApiController implements UsersApi {
             user.setUsername(userEntity.getUsername());
             user.setRole(userEntity.getRole());
             user.setPoints(userEntity.getPoints());
-            user.setReputation(userEntity.getReputation());
             user.setBirthdate(userEntity.getBirthdate());
+            user.setBadges(BadgeEntityToBadgeList(userEntity));
 
             return ResponseEntity.ok(user);
         }
@@ -127,6 +118,7 @@ public class UsersApiController implements UsersApi {
             userEntity.setPoints(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getPoints());
             userEntity.setId(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getId());
             userEntity.setApplicationEntity(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getApplicationEntity());
+            userEntity.setBadges(userRepository.findByUsernameAndApplicationEntity_ApiKey(username, xApiKey).getBadges());
             userRepository.deleteById(userEntity.getId());
 
             return ResponseEntity.ok().build();
@@ -135,4 +127,31 @@ public class UsersApiController implements UsersApi {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    private List<BadgeEntity> BadgesToBadgeEntityList(User user, String xApiKey){
+        ApplicationEntity applicationEntity = applicationRepository.findByApiKey(xApiKey);
+
+        List<BadgeEntity> badgeEntities = new LinkedList<>();
+        for(Badge b : user.getBadges()){
+            BadgeEntity badgeEntity = new BadgeEntity();
+            badgeEntity.setApplicationEntity(applicationEntity);
+            badgeEntity.setDescription(b.getDescription());
+            badgeEntity.setName(b.getName());
+            badgeEntities.add(badgeEntity);
+        }
+        return badgeEntities;
+    }
+
+    private List<Badge> BadgeEntityToBadgeList(UserEntity userEntity){
+        List<Badge> badges = new LinkedList<>();
+        for(BadgeEntity b : userEntity.getBadges()){
+            Badge badge = new Badge();
+            badge.setDescription(b.getDescription());
+            badge.setName(b.getName());
+            badges.add(badge);
+        }
+        return badges;
+    }
+
 }

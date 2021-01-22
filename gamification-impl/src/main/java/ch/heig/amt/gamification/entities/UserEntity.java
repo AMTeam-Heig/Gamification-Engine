@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import java.util.List;
+
 @Entity
 @Data
 public class UserEntity implements Serializable {
@@ -29,5 +31,8 @@ public class UserEntity implements Serializable {
 
     @ManyToOne
     private ApplicationEntity applicationEntity;
+
+    @ManyToMany
+    private List<BadgeEntity> badges;
 
 }

@@ -40,7 +40,6 @@ public class BadgesApiController implements BadgesApi {
                 BadgeEntity badgeEntity = new BadgeEntity();
                 badgeEntity.setName(badge.getName());
                 badgeEntity.setDescription(badge.getDescription());
-                badgeEntity.setObtainedOnDate(badge.getObtainedOnDate());
                 badgeEntity.setApplicationEntity(applicationEntity);
                 badgeRepository.save(badgeEntity);
 
@@ -58,11 +57,7 @@ public class BadgesApiController implements BadgesApi {
     public ResponseEntity<List<Badge>> getBadges(@RequestHeader(value = "X-API-KEY") String xApiKey) {
         List<Badge> badges = new ArrayList<>();
         for (BadgeEntity badgeEntity : badgeRepository.findAllByApplicationEntity_ApiKey(xApiKey)) {
-            Badge badge = new Badge();
-            badge.setName(badgeEntity.getName());
-            badge.setDescription(badgeEntity.getDescription());
-            badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());
-            badges.add(badge);
+            badges.add(badgeEntityToBadge(badgeEntity));
         }
         return ResponseEntity.ok(badges);
     }
@@ -77,14 +72,17 @@ public class BadgesApiController implements BadgesApi {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
 
-            Badge badge = new Badge();
-            badge.setName(badgeEntity.getName());
-            badge.setDescription(badgeEntity.getDescription());
-            badge.setObtainedOnDate(badgeEntity.getObtainedOnDate());
-
-            return ResponseEntity.ok(badge);
+            return ResponseEntity.ok(badgeEntityToBadge(badgeEntity));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    public Badge badgeEntityToBadge(BadgeEntity badgeEntity){
+        Badge badge = new Badge();
+        badge.setName(badgeEntity.getName());
+        badge.setDescription(badgeEntity.getDescription());
+        return badge;
+    }
+
 }
