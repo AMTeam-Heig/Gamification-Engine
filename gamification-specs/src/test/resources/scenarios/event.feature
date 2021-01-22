@@ -1,7 +1,7 @@
-Feature: Basic operations on events
+#Feature: Basic operations on events
 
-  Background:
-    Given there is a Gamification server
+ # Background:
+  #  Given there is a Gamification server
 
 #  Scenario: create an event
 #    Given I have an event payload
