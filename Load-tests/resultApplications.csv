@@ -1,0 +1,41 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1611272838357,72,HTTP Request,201,,virtual applications 1-4,,true,,178,287,4,4,http://127.0.0.1:9081/applications,72,0,2
+1611272838156,273,HTTP Request,201,,virtual applications 1-2,,true,,178,287,4,4,http://127.0.0.1:9081/applications,273,0,1
+1611272838059,370,HTTP Request,201,,virtual applications 1-1,,true,,178,287,4,4,http://127.0.0.1:9081/applications,370,0,2
+1611272838268,161,HTTP Request,201,,virtual applications 1-3,,true,,178,287,4,4,http://127.0.0.1:9081/applications,161,0,1
+1611272838463,9,HTTP Request,201,,virtual applications 1-5,,true,,178,287,5,5,http://127.0.0.1:9081/applications,9,0,2
+1611272838430,55,Requête HTTP,200,,virtual applications 1-3,text,true,,286,139,5,5,http://127.0.0.1:9081/applications/14.06.1955,55,0,0
+1611272838430,55,Requête HTTP,200,,virtual applications 1-4,text,true,,286,139,5,5,http://127.0.0.1:9081/applications/16.06.1955,55,0,0
+1611272838430,56,Requête HTTP,200,,virtual applications 1-1,text,true,,286,139,5,5,http://127.0.0.1:9081/applications/10.06.1955,55,0,0
+1611272838430,56,Requête HTTP,200,,virtual applications 1-2,text,true,,286,139,5,5,http://127.0.0.1:9081/applications/12.06.1955,55,0,0
+1611272838473,13,Requête HTTP,200,,virtual applications 1-5,text,true,,286,139,5,5,http://127.0.0.1:9081/applications/18.06.1955,12,0,0
+1611272838487,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-1,text,false,,1121,0,5,5,http:/,0,0,0
+1611272838487,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-2,text,false,,1121,0,5,5,http:/,0,0,0
+1611272838487,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-4,text,false,,1121,0,5,5,http:/,0,0,0
+1611272838487,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-3,text,false,,1121,0,5,5,http:/,0,0,0
+1611272838487,0,Debug Sampler,200,OK,virtual applications 1-1,text,true,,353,0,5,5,null,0,0,0
+1611272838487,1,Debug Sampler,200,OK,virtual applications 1-3,text,true,,353,0,5,5,null,0,0,0
+1611272838487,0,Debug Sampler,200,OK,virtual applications 1-2,text,true,,353,0,5,5,null,0,0,0
+1611272838487,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-5,text,false,,1121,0,5,5,http:/,0,0,0
+1611272838487,1,Debug Sampler,200,OK,virtual applications 1-4,text,true,,353,0,5,5,null,0,0,0
+1611272838488,1,Debug Sampler,200,OK,virtual applications 1-5,text,true,,353,0,5,5,null,0,0,0
+1611272838552,5,HTTP Request,201,,virtual applications 1-6,,true,,178,287,1,1,http://127.0.0.1:9081/applications,5,0,1
+1611272838558,3,Requête HTTP,200,,virtual applications 1-6,text,true,,286,139,1,1,http://127.0.0.1:9081/applications/20.06.1955,3,0,0
+1611272838561,1,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-6,text,false,,1121,0,1,1,http:/,0,0,0
+1611272838562,0,Debug Sampler,200,OK,virtual applications 1-6,text,true,,353,0,1,1,null,0,0,0
+1611272838666,10,HTTP Request,201,,virtual applications 1-7,,true,,178,287,1,1,http://127.0.0.1:9081/applications,10,0,1
+1611272838677,8,Requête HTTP,200,,virtual applications 1-7,text,true,,286,139,1,1,http://127.0.0.1:9081/applications/22.06.1955,8,0,0
+1611272838687,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-7,text,false,,1121,0,1,1,http:/,0,0,0
+1611272838688,0,Debug Sampler,200,OK,virtual applications 1-7,text,true,,353,0,1,1,null,0,0,0
+1611272838772,7,HTTP Request,201,,virtual applications 1-8,,true,,178,287,1,1,http://127.0.0.1:9081/applications,7,0,1
+1611272838779,3,Requête HTTP,200,,virtual applications 1-8,text,true,,286,139,1,1,http://127.0.0.1:9081/applications/24.06.1955,3,0,0
+1611272838783,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-8,text,false,,1121,0,1,1,http:/,0,0,0
+1611272838783,0,Debug Sampler,200,OK,virtual applications 1-8,text,true,,353,0,1,1,null,0,0,0
+1611272838855,13,HTTP Request,201,,virtual applications 1-9,,true,,178,287,1,1,http://127.0.0.1:9081/applications,13,0,2
+1611272838869,8,Requête HTTP,200,,virtual applications 1-9,text,true,,286,139,1,1,http://127.0.0.1:9081/applications/26.06.1955,8,0,0
+1611272838878,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-9,text,false,,1121,0,1,1,http:/,0,0,0
+1611272838878,0,Debug Sampler,200,OK,virtual applications 1-9,text,true,,353,0,1,1,null,0,0,0
+1611272838960,7,HTTP Request,201,,virtual applications 1-10,,true,,178,287,1,1,http://127.0.0.1:9081/applications,7,0,1
+1611272838967,5,Requête HTTP,200,,virtual applications 1-10,text,true,,286,139,1,1,http://127.0.0.1:9081/applications/28.06.1955,5,0,0
+1611272838973,0,Requête HTTP,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,virtual applications 1-10,text,false,,1121,0,1,1,http:/,0,0,0
+1611272838974,0,Debug Sampler,200,OK,virtual applications 1-10,text,true,,354,0,1,1,null,0,0,0
