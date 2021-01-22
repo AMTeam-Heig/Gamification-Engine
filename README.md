@@ -2,6 +2,10 @@
 
 # Gamification
 The version pushed on Docker for the second project is on branch ```master```.
+Link to the 2nd project : 
+```
+https://github.com/AMTeam-Heig/project_2
+```
 
 To run the program use the following steps:
  
