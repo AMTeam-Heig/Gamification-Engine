@@ -1,6 +1,7 @@
 ![Publishing the Docker image](https://github.com/AMTeam-Heig/Gamification-Engine/workflows/Publishing%20the%20Docker%20image/badge.svg)
 
 # Gamification
+The version pushed on Docker for the second project is on branch ```master```.
 
 To run the program use the following steps:
  
