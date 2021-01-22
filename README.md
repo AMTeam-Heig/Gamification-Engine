@@ -23,8 +23,8 @@ docker run -p 8080:8080 ghcr.io/amteam-heig/gamification-engine/spring/gamificat
 Note that this version is used mainly to integrate the gamification engine with the web application. 
 You can then access:
 
-* the [API documentation](http://localhost:8080/swagger-ui.html), generated from annotations in the code
-* the [API endpoint](http://localhost:8080/), accepting GET and POST requests
+* the [API documentation](http://localhost:9081/swagger-ui.html), generated from annotations in the code
+* the [API endpoint](http://localhost:9081/), accepting GET and POST requests
 
 
 # Test the gamification  microservice by running the executable specification
