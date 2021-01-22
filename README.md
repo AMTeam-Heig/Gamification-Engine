@@ -9,7 +9,9 @@ https://github.com/AMTeam-Heig/project_2
 
 To run the program use the following steps:
  
-After cloning the repository you can use maven to build and run the REST API implementation from the command line. After invoking the following maven goal, the Spring Boot server will be up and running, listening for connections on port 8080.
+Kindly refer to this *[version](https://github.com/AMTeam-Heig/Gamification-Engine/tree/Cucumber-Tests)* if you prefer to run only the gamification engine .
+
+After cloning the repository you can use maven to build and run the REST API implementation from the command line. After invoking the following maven goal, the Spring Boot server will be up and running, listening for connections on port 9081.
 ```
 cd gamification-impl/
 mvn spring-boot:run
